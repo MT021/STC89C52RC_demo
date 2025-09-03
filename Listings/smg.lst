@@ -1,0 +1,69 @@
+C51 COMPILER V9.54   SMG                                                                   08/27/2025 19:36:53 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE SMG
+OBJECT MODULE PLACED IN .\Objects\smg.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE smg.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\smg.l
+                    -st) TABS(2) OBJECT(.\Objects\smg.obj)
+
+line level    source
+
+   1          //#include "smg.h"
+   2          #include <REGX52.H>
+   3          #include "delay.h"
+   4          #define SMG_A_DP_PORT P0  //使用宏定义数码管段码口
+   5          
+   6          sbit LSA=P2^2;
+   7          sbit LSB=P2^3;
+   8          sbit LSC=P2^4;
+   9          
+  10          //共阴极数码管显示0~F的段码数据
+  11          unsigned char gsmg_code[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  12                  0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
+  13          
+  14          /*******************************************************************************
+  15          * 函 数 名       : smg_display
+  16          * 函数功能     : 动态数码管显示
+  17          * 输    入       : dat：要显示的数据
+  18                     pos：从左开始第几个位置开始显示，范围1-8
+  19          * 输    出       : 无
+  20          *******************************************************************************/
+  21          void smg_display(unsigned char dat[],unsigned char pos)
+  22          {
+  23   1        unsigned char i=0;
+  24   1        unsigned char pos_temp=pos-1;
+  25   1      
+  26   1        for(i=pos_temp;i<8;i++)
+  27   1        {
+  28   2            switch(i)//位选
+  29   2          {
+  30   3            case 0: LSC=1;LSB=1;LSA=1;break;
+  31   3            case 1: LSC=1;LSB=1;LSA=0;break;
+  32   3            case 2: LSC=1;LSB=0;LSA=1;break;
+  33   3            case 3: LSC=1;LSB=0;LSA=0;break;
+  34   3            case 4: LSC=0;LSB=1;LSA=1;break;
+  35   3            case 5: LSC=0;LSB=1;LSA=0;break;
+  36   3            case 6: LSC=0;LSB=0;LSA=1;break;
+  37   3            case 7: LSC=0;LSB=0;LSA=0;break;
+  38   3          }
+  39   2          SMG_A_DP_PORT=dat[i-pos_temp];//传送段选数据
+  40   2          delay_10us(100);//延时一段时间，等待显示稳定
+  41   2          SMG_A_DP_PORT=0x00;//消音
+  42   2        }
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    146    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     17       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.54   SMG                                                                   08/27/2025 19:36:53 PAGE 2   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
