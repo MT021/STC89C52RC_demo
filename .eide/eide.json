@@ -1,0 +1,121 @@
+{
+  "name": "demo",
+  "type": "C51",
+  "dependenceList": [],
+  "srcDirs": [],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "Source Group 1",
+        "files": [
+          {
+            "path": "main.c"
+          },
+          {
+            "path": "UART.c"
+          },
+          {
+            "path": "UART.h"
+          },
+          {
+            "path": "I2C.c"
+          },
+          {
+            "path": "I2C.h"
+          },
+          {
+            "path": "XPT2046.c"
+          },
+          {
+            "path": "XPT2046.h"
+          },
+          {
+            "path": "AT24C02.c"
+          },
+          {
+            "path": "AT24C02.h"
+          },
+          {
+            "path": "delay.h"
+          },
+          {
+            "path": "delay.c"
+          },
+          {
+            "path": "IR.c"
+          },
+          {
+            "path": "IR.h"
+          },
+          {
+            "path": "smg.c"
+          },
+          {
+            "path": "smg.h"
+          },
+          {
+            "path": "PWM.c"
+          },
+          {
+            "path": "PWM.h"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "8cb298418787b665d66ab47230cba95e"
+  },
+  "targets": {
+    "Target 1": {
+      "excludeList": [],
+      "toolchain": "Keil_C51",
+      "compileConfig": {
+        "options": "null"
+      },
+      "uploader": "Custom",
+      "uploadConfig": {
+        "bin": "",
+        "commandLine": "",
+        "eraseChipCommand": ""
+      },
+      "uploadConfigMap": {},
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "../../INC/Atmel"
+        ],
+        "libList": [],
+        "defineList": []
+      },
+      "builderOptions": {
+        "Keil_C51": {
+          "version": 2,
+          "beforeBuildTasks": [],
+          "afterBuildTasks": [],
+          "global": {
+            "ram-mode": "SMALL",
+            "rom-mode": "LARGE"
+          },
+          "c/cpp-compiler": {
+            "optimization-type": "SPEED",
+            "optimization-level": "level-8"
+          },
+          "asm-compiler": {},
+          "linker": {
+            "remove-unused": true,
+            "output-format": "elf",
+            "misc-controls": ""
+          }
+        }
+      }
+    }
+  },
+  "version": "3.6"
+}
