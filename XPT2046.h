@@ -1,9 +1,13 @@
 #ifndef __XPT2046_H__
 #define __XPT2046_H__
 
-extern unsigned int g_ADC_AD1_Value;
+#define XPT2046_XP 		0x94
+#define XPT2046_YP 		0xD4
+#define XPT2046_VBAT	0xA4
+#define XPT2046_AUX		0xE4
 
-void Timer0Init(void);
+
+// void Timer0Init(void);
 unsigned int xpt2046_readADC(unsigned char cmd);
 
 #endif

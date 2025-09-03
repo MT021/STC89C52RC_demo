@@ -60,6 +60,12 @@
           },
           {
             "path": "PWM.h"
+          },
+          {
+            "path": "matrixled.c"
+          },
+          {
+            "path": "matrixled.h"
           }
         ],
         "folders": []

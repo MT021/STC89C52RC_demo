@@ -1,7 +1,7 @@
 #include <REGX52.H>
 #include "delay.h"
 sbit IR_Signal = P3^2;
-unsigned char gIR_databuf[4];
+unsigned char IR_databuf[4];
 
 void IR_INT0_Init()
 {
@@ -41,7 +41,7 @@ void IR_INT0_Routine() interrupt 0
 		{
 			for(j = 0;j < 8;j++)
 			{
-				gIR_databuf[i] >>= 1;
+				IR_databuf[i] >>= 1;
 				
 					timecnt = 600;
 					while((IR_Signal == 0) && timecnt)
@@ -61,19 +61,24 @@ void IR_INT0_Routine() interrupt 0
 						if(timecnt == 0) return;
 						
 					}
-						if(timecnt < 12) gIR_databuf[i] |= 0x80;
+						if(timecnt < 12) IR_databuf[i] |= 0x80;
 
-//					if(IR_highcnt >= 8) gIR_databuf[i] |= 0x80;
+//					if(IR_highcnt >= 8) IR_databuf[i] |= 0x80;
 //						
 //					IR_highcnt = 0;
 			}
 		}
-		if(gIR_databuf[2] != ~gIR_databuf[3])
+		if(IR_databuf[2] != ~IR_databuf[3])
 		{
 			for(i = 0;i < 4;i++)
 			{
-				gIR_databuf[i] = 0;
+				IR_databuf[i] = 0;
 			}
 		}
 	}
+}
+
+unsigned char IR_get_ctrl_char()
+{
+	return IR_databuf[2];
 }
