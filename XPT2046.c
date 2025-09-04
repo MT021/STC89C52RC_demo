@@ -1,5 +1,5 @@
 #include <REGX52.H>
-#include "XPT2046.h"
+// #include "XPT2046.h"
 
 // #define XPT2046_XP 		0x94
 // #define XPT2046_YP 		0xD4
