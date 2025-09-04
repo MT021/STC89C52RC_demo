@@ -66,6 +66,18 @@
           },
           {
             "path": "matrixled.h"
+          },
+          {
+            "path": "Timer0.c"
+          },
+          {
+            "path": "Timer0.h"
+          },
+          {
+            "path": "EKey.c"
+          },
+          {
+            "path": "EKey.h"
           }
         ],
         "folders": []
