@@ -4,6 +4,7 @@
 #include "smg.h"
 #include "XPT2046.h"
 #include "PWM.h"
+#include "Timer0.h"
 
 void main()
 {
