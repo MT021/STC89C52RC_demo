@@ -2,6 +2,7 @@
 #include "XPT2046.h"
 #include "smg.h"
 #include "IR.h"
+#include "matrixled.h"
 
 //XPT2046_ADC
 unsigned char XPT2046_target = XPT2046_VBAT; 
@@ -13,6 +14,19 @@ unsigned char smg_value_buf[8];
 //IR
 unsigned char ir_temp = 0;
 
+
+// matrixled --ARE YOU OK !
+unsigned char i, offset = 0;
+unsigned char code arr_image_dynamic[] = {
+											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
+											0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
+											0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
+											0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
+											0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
+											0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
+											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+										};
 
 void Timer0Init(void)		//10ms@11.0592MHz
 {
@@ -28,6 +42,9 @@ void Timer0Init(void)		//10ms@11.0592MHz
 	//smg
 	smg_value_buf[7] = 0X76;// Hex H
 	smg_value_buf[4] = 0x00;// gap
+
+	//matrixled
+	matrixled_init();
 }
 
 void Timer0_Routine() interrupt 1
@@ -41,14 +58,14 @@ void Timer0_Routine() interrupt 1
 	if(0 == counts)
 	{
 		
-		/*############################### IR ########################*/
+		//IR
 		ir_temp = IR_get_ctrl_char();
 
 		smg_value_buf[5] = gsmg_code[ir_temp/16];//十位 hex
 		smg_value_buf[6] = gsmg_code[ir_temp%16];//个位 hex
 		
 
-		/*############################### show ADC on nixie #######################*/	
+		//ADC
 		XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
 		smg_value_buf[0] = gsmg_code[XPT2046_ADC_Value / 1000];
 		smg_value_buf[1] = gsmg_code[XPT2046_ADC_Value / 100 % 10];
@@ -57,7 +74,22 @@ void Timer0_Routine() interrupt 1
 		
 		
 	}
+	// show on nixie
 	smg_display(smg_value_buf,1);
+
+	// matrixled
+	for(i = 0;i < 8;i++)
+	{
+		matrixled(i, arr_image_dynamic[i + offset]);
+	}
+	if( 0 == counts % 10)
+	{
+		if(++offset > 56)
+		{
+			offset = 0;
+		}
+				
+	}
 }
 
 void xpt2046_set_target(unsigned char target)
