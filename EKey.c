@@ -1,7 +1,8 @@
 #include <REGX52.H>
 #include "delay.h"
+#include "EKey.h"
 
-unsigned char scan_ekey()
+ekey scan_ekey()
 {
 		if(P3_1 == 0)
 		{
@@ -9,7 +10,7 @@ unsigned char scan_ekey()
 			while(P3_1 == 0);
 			Delay1ms(20);
 
-			return 1;	
+			return K1;	
 	
 		}
 
@@ -19,7 +20,7 @@ unsigned char scan_ekey()
 			while(P3_0 == 0);
 			Delay1ms(20);
 
-			return 2;	
+			return K2;	
 			
 		}
 
@@ -29,7 +30,7 @@ unsigned char scan_ekey()
 			while(P3_2 == 0);
 			Delay1ms(20);
 
-			return 3;	
+			return K3;	
 	
 		}
 
@@ -39,8 +40,8 @@ unsigned char scan_ekey()
 			while(P3_3 == 0);
 			Delay1ms(20);
 
-			return 4;	
+			return K4;	
 	
 		}
-		return 0;
+		return None;
 }

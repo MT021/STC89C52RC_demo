@@ -40,8 +40,8 @@ void Timer0Init(void)		//10ms@11.0592MHz
 	EA = 1;
 
 	//smg
-	smg_value_buf[7] = 0X76;// Hex H
-	smg_value_buf[4] = 0x00;// gap
+	smg_value_buf[7] = 0X76;// Hex "H"
+	smg_value_buf[4] = 0x00;// gap between ADC and IR char
 
 	//matrixled
 	matrixled_init();
@@ -54,8 +54,8 @@ void Timer0_Routine() interrupt 1
 	TL0 = 0x00;		
 	TH0 = 0xDC;
 	counts++;
-	counts %= 50;
-	if(0 == counts)
+	counts %= 100;
+	if(0 == counts % 50)
 	{
 		
 		//IR

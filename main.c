@@ -9,52 +9,33 @@
 
 void main()
 {
-	// unsigned char ir_temp, XPT2046_target;
-	// unsigned int XPT2046_ADC_Value;
-	// unsigned char smg_value_buf[8];
-	
 	IR_INT0_Init();
 	Timer0Init();
 	PWM_Init(0xAE, 0xFF, 10, 5);
 
 	while(1)
 	{
-/*############################### scan ekey to set ADC target ########################*/
+		//scan ekey to set ADC target
 		switch (scan_ekey())
 		{
-			case 1:
+			case K1:
 				xpt2046_set_target(XPT2046_XP);
 				break;
 			
-			case 2:
+			case K2:
 				xpt2046_set_target(XPT2046_YP);
 				break;	
 			
-			case 3:
+			case K3:
 				xpt2046_set_target(XPT2046_VBAT);
 				break;
 			
-			case 4:
+			case K4:
 				xpt2046_set_target(XPT2046_AUX);
 				break;	
 
 			default:
 				break;
 		}
-// /*############################### IR ########################*/
-// 		ir_temp = IR_get_ctrl_char();
-
-// 		smg_value_buf[5] = gsmg_code[ir_temp/16];//十位
-// 		smg_value_buf[6] = gsmg_code[ir_temp%16];//个位
-// 		smg_value_buf[7] = 0X76;// Hex H
-
-// /*############################### show ADC on nixie #######################*/	
-// 		XPT2046_ADC_Value = xpt2046_get_adc_value();
-// 		smg_value_buf[0] = gsmg_code[XPT2046_ADC_Value / 1000];
-// 		smg_value_buf[1] = gsmg_code[XPT2046_ADC_Value / 100 % 10];
-// 		smg_value_buf[2] = gsmg_code[XPT2046_ADC_Value / 10 % 10];
-// 		smg_value_buf[3] = gsmg_code[XPT2046_ADC_Value % 10];
-// 		smg_value_buf[4] = 0x00;
-// 		smg_display(smg_value_buf,1);
 	}
 }
