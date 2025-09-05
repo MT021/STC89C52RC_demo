@@ -11,6 +11,24 @@ sbit LSC=P2^4;
 unsigned char gsmg_code[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
 				0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
 
+
+/*******************************************************************************
+* 函 数 名       : get_smg_code
+* 函数功能		 : get segment code for number 0-F
+* 输    入       : num：number 0-15
+* 输    出    	 : segment code
+*******************************************************************************/
+unsigned char get_smg_code(unsigned char num)
+{
+	if(num < 16)
+	{
+		return gsmg_code[num];
+	}
+	else
+	{
+		return 0x00;
+	}
+}
 /*******************************************************************************
 * 函 数 名       : smg_display
 * 函数功能		 : 动态数码管显示

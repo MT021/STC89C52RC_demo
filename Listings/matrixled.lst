@@ -1,0 +1,54 @@
+C51 COMPILER V9.60.7.0   MATRIXLED                                                         09/05/2025 22:58:18 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MATRIXLED
+OBJECT MODULE PLACED IN .\Objects\matrixled.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE matrixled.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\matrixled.lst) TABS(2) OBJECT(.\Objects\matrixled.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          
+   4          sbit SER = P3^4;
+   5          sbit SCK = P3^6;
+   6          sbit RCK = P3^5;
+   7          
+   8          void matrixled_init()
+   9          {
+  10   1        SCK = 0;
+  11   1        RCK = 0;
+  12   1      }
+  13          
+  14          void matrixled(unsigned char col, unsigned char Byte)
+  15          {
+  16   1        unsigned char i;
+  17   1        for(i = 0;i < 8;i++)
+  18   1        {
+  19   2          SER = Byte & (0x80 >> i);
+  20   2          SCK = 1;
+  21   2          SCK = 0;
+  22   2        }
+  23   1        RCK = 1;
+  24   1        RCK = 0;
+  25   1        
+  26   1        P0 = ~(0x80 >> col);
+  27   1        Delay1ms(1);
+  28   1        P0 = 0xFF;
+  29   1        
+  30   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     76    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

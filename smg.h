@@ -11,7 +11,8 @@
 //sbit LSB=P2^3;
 //sbit LSC=P2^4;
 
-extern unsigned char gsmg_code[17];
+// extern unsigned char gsmg_code[17];
+unsigned char get_smg_code(unsigned char num);
 
 void smg_display(unsigned char dat[],unsigned char pos);
 

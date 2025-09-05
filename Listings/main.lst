@@ -1,7 +1,7 @@
-C51 COMPILER V9.54   MAIN                                                                  08/27/2025 19:37:34 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/05/2025 22:58:16 PAGE 1   
 
 
-C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
                     -.lst) TABS(2) OBJECT(.\Objects\main.obj)
@@ -9,52 +9,61 @@ COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE 
 line level    source
 
    1          #include <REGX52.H>
-   2          #include "delay.h"
+   2          // #include "delay.h"
    3          #include "IR.h"
-   4          #include "smg.h"
+   4          // #include "smg.h"
    5          #include "XPT2046.h"
    6          #include "PWM.h"
-   7          
-   8          void main()
-   9          {
-  10   1      
-  11   1        unsigned char ir_temp;
-  12   1        unsigned char smg_value_buf[8];
-  13   1        
-  14   1        IR_INT0_Init();
-  15   1        Timer0Init();
-  16   1        PWM_Init(0xAE, 0xFF, 10, 5);
-  17   1      
-  18   1        
-  19   1        while(1)
-  20   1        {
-  21   2      /*############################### 红外接收 #######################*/
-  22   2          ir_temp = gIR_databuf[2];
-  23   2      
-  24   2          smg_value_buf[5] = gsmg_code[ir_temp/16];//将控制码高4位转换为数码管段码
-  25   2          smg_value_buf[6] = gsmg_code[ir_temp%16];//将控制码低4位转换为数码管段码
-  26   2          smg_value_buf[7] = 0X76;//显示H的段码
-  27   2      
-  28   2      //    smg_display(ired_buf,6);
-  29   2          
-  30   2      /*############################### ADC #######################*/ 
-  31   2          smg_value_buf[0] = gsmg_code[g_ADC_AD1_Value / 1000];
-  32   2          smg_value_buf[1] = gsmg_code[g_ADC_AD1_Value / 100 % 10];
-  33   2          smg_value_buf[2] = gsmg_code[g_ADC_AD1_Value / 10 % 10];
-  34   2          smg_value_buf[3] = gsmg_code[g_ADC_AD1_Value % 10];
-  35   2          smg_value_buf[4] = 0x00;
-  36   2          smg_display(smg_value_buf,1);
-  37   2        }
-  38   1      }
+   7          #include "Timer0.h"
+   8          #include "EKey.h"
+   9          
+  10          void main()
+  11          {
+  12   1      
+  13   1        IR_INT0_Init();
+  14   1        Timer0Init();
+  15   1        PWM_Init(0xAE, 0xFF, 10, 5);
+  16   1      
+  17   1        while(1)
+  18   1        {
+  19   2          //scan ekey to set ADC target
+  20   2          switch (scan_ekey())
+  21   2          {
+  22   3            case K1:
+  23   3              // xpt2046_set_target(XPT2046_XP);
+  24   3              smg_set_enable(1);
+  25   3              break;
+  26   3            
+  27   3            case K2:
+  28   3              // xpt2046_set_target(XPT2046_YP);
+  29   3              smg_set_enable(0);
+  30   3              break;  
+  31   3            
+  32   3            case K3:
+  33   3              // xpt2046_set_target(XPT2046_VBAT);
+  34   3              smg_set_enable(1);
+  35   3              break;
+  36   3            
+  37   3            case K4:
+  38   3              smg_set_enable(0); // toggle smg/matrixled
+  39   3              break;  
+  40   3      
+  41   3            default:
+  42   3              break;
+  43   3          }
+  44   2        }
+  45   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    146    ----
+   CODE SIZE        =     56    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       9
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              09/05/2025 22:58:16 PAGE 2   
+
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

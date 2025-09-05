@@ -6,7 +6,11 @@
 ".\Objects\delay.obj",
 ".\Objects\IR.obj",
 ".\Objects\smg.obj",
-".\Objects\PWM.obj" 
+".\Objects\PWM.obj",
+".\Objects\ds1302.obj",
+".\Objects\EKey.obj",
+".\Objects\matrixled.obj",
+".\Objects\Timer0.obj" 
 TO ".\Objects\demo" 
 PRINT(".\Listings\demo.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 

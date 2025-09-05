@@ -145,7 +145,7 @@ void Timer2_Routine() interrupt 5
 				}
 				else
 				{
-					smgbuffer[i] = gsmg_code[RTBuffer[i]];
+					smgbuffer[i] = get_smg_code(RTBuffer[i]);
 				}
 			}
 		smg_display(smgbuffer, 1);

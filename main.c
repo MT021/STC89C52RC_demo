@@ -9,6 +9,7 @@
 
 void main()
 {
+
 	IR_INT0_Init();
 	Timer0Init();
 	PWM_Init(0xAE, 0xFF, 10, 5);

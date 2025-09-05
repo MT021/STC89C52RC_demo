@@ -1,7 +1,5 @@
 #ifndef __EKEY_H__
 #define __EKEY_H__
-
-unsigned char scan_ekey();
 typedef enum
 {
     None = 0,
@@ -10,5 +8,7 @@ typedef enum
     K3,
     K4
 }ekey;
+
+ekey scan_ekey();
 
 #endif

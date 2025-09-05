@@ -4,12 +4,15 @@
 #include "IR.h"
 #include "matrixled.h"
 
+#define smg_enable 1  //1: enable smg, 0: disable smg and enable matrixled
+
 //XPT2046_ADC
 unsigned char XPT2046_target = XPT2046_VBAT; 
 unsigned int XPT2046_ADC_Value = 0;
 
 //smg
 unsigned char smg_value_buf[8];
+
 
 //IR
 unsigned char ir_temp = 0;
@@ -61,35 +64,40 @@ void Timer0_Routine() interrupt 1
 		//IR
 		ir_temp = IR_get_ctrl_char();
 
-		smg_value_buf[5] = gsmg_code[ir_temp/16];//十位 hex
-		smg_value_buf[6] = gsmg_code[ir_temp%16];//个位 hex
+		smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
+		smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
 		
 
 		//ADC
 		XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
-		smg_value_buf[0] = gsmg_code[XPT2046_ADC_Value / 1000];
-		smg_value_buf[1] = gsmg_code[XPT2046_ADC_Value / 100 % 10];
-		smg_value_buf[2] = gsmg_code[XPT2046_ADC_Value / 10 % 10];
-		smg_value_buf[3] = gsmg_code[XPT2046_ADC_Value % 10];
+		smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+		smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+		smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+		smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
 		
 		
 	}
-	// show on nixie
-	smg_display(smg_value_buf,1);
-
-	// matrixled
-	for(i = 0;i < 8;i++)
+	// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
+#if smg_enable
 	{
-		matrixled(i, arr_image_dynamic[i + offset]);
+		smg_display(smg_value_buf,1);
 	}
-	if( 0 == counts % 10)
+#else
 	{
-		if(++offset > 56)
+		//matrixled
+		for(i = 0;i < 8;i++)
 		{
-			offset = 0;
+			matrixled(i, arr_image_dynamic[i + offset]);
 		}
-				
+		if( 0 == counts % 15)
+		{
+			if(++offset > 56)
+			{
+				offset = 0;
+			}			
+		}
 	}
+#endif
 }
 
 void xpt2046_set_target(unsigned char target)
@@ -97,6 +105,15 @@ void xpt2046_set_target(unsigned char target)
 	XPT2046_target = target;
 }
 
+// void smg_set_enable(bit enable)
+// {
+// 	smg_enable = enable;	// 1: enable smg, 0: disable smg and enable matrixled
+// }
+
+// bit char smg_get_enable()
+// {
+// 	return smg_eable;
+// }
 // unsigned int xpt2046_get_adc_value()
 // {
 //     return XPT2046_ADC_Value;
