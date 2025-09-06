@@ -6,6 +6,7 @@
 #include "PWM.h"
 #include "Timer0.h"
 #include "EKey.h"
+#include "matrixkey.h"
 
 void main()
 {
@@ -20,19 +21,90 @@ void main()
 		switch (scan_ekey())
 		{
 			case K1:
-				xpt2046_set_target(XPT2046_XP);
+				xpt2046_set_target(XPT2046_XP);  //AIN0 AD1
 				break;
 			
 			case K2:
-				xpt2046_set_target(XPT2046_YP);
+				xpt2046_set_target(XPT2046_YP);	//AIN1 NTC1
 				break;	
 			
 			case K3:
-				xpt2046_set_target(XPT2046_VBAT);
+				xpt2046_set_target(XPT2046_VBAT);	//AIN2 GR1
 				break;
 			
 			case K4:
-				xpt2046_set_target(XPT2046_AUX);
+				xpt2046_set_target(XPT2046_AUX);	//AIN3 J52
+				break;	
+
+			default:
+				break;
+		}
+
+		//scan matrix key TO DO
+		switch (matrix_key_scan())
+		{
+			case mKey1:
+				P2_7 = !P2_7;
+				break;
+			
+			case mKey2:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey3:
+				P2_7 = !P2_7;
+				break;
+			
+			case mKey4:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey5:
+				P2_7 = !P2_7;
+				break;
+			
+			case mKey6:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey7:
+				P2_7 = !P2_7;
+				break;
+			
+			case mKey8:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey9:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey10:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey11:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey12:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey13:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey14:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey15:
+				P2_7 = !P2_7;
+				break;
+
+			case mKey16:
+				P2_7 = !P2_7;
 				break;	
 
 			default:

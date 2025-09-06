@@ -24,7 +24,8 @@ void matrixled(unsigned char col, unsigned char Byte)
 	RCK = 0;
 	
 	P0 = ~(0x80 >> col);
-	Delay1ms(1);
+	// Delay1ms(1);
+	delay_10us(100);
 	P0 = 0xFF;
 	
 }

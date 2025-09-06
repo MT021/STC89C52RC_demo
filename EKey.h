@@ -2,7 +2,7 @@
 #define __EKEY_H__
 typedef enum
 {
-    None = 0,
+    eKey_None = 0,
     K1,
     K2,
     K3,

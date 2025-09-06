@@ -4,7 +4,7 @@
 #include "IR.h"
 #include "matrixled.h"
 
-#define smg_enable 1  //1: enable smg, 0: disable smg and enable matrixled
+#define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
 
 //XPT2046_ADC
 unsigned char XPT2046_target = XPT2046_VBAT; 
@@ -12,6 +12,7 @@ unsigned int XPT2046_ADC_Value = 0;
 
 //smg
 unsigned char smg_value_buf[8];
+bit smg_enable = 1;	// 1: enable smg, 0: disable smg and enable matrixled
 
 
 //IR
@@ -19,7 +20,7 @@ unsigned char ir_temp = 0;
 
 
 // matrixled --ARE YOU OK !
-unsigned char i, offset = 0;
+// unsigned char i, offset = 0;
 unsigned char code arr_image_dynamic[] = {
 											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
@@ -53,7 +54,7 @@ void Timer0Init(void)		//10ms@11.0592MHz
 void Timer0_Routine() interrupt 1
 {
 	static unsigned char counts = 0;
-
+	static unsigned char i, offset = 0;
 	TL0 = 0x00;		
 	TH0 = 0xDC;
 	counts++;
@@ -78,7 +79,7 @@ void Timer0_Routine() interrupt 1
 		
 	}
 	// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
-#if smg_enable
+#if SMG_EN
 	{
 		smg_display(smg_value_buf,1);
 	}
@@ -89,7 +90,7 @@ void Timer0_Routine() interrupt 1
 		{
 			matrixled(i, arr_image_dynamic[i + offset]);
 		}
-		if( 0 == counts % 15)
+		if( 0 == counts % 50)
 		{
 			if(++offset > 56)
 			{
@@ -105,15 +106,15 @@ void xpt2046_set_target(unsigned char target)
 	XPT2046_target = target;
 }
 
-// void smg_set_enable(bit enable)
-// {
-// 	smg_enable = enable;	// 1: enable smg, 0: disable smg and enable matrixled
-// }
+void smg_set_enable(bit enable)
+{
+	smg_enable = enable;	// 1: enable smg, 0: disable smg and enable matrixled
+}
 
-// bit char smg_get_enable()
-// {
-// 	return smg_eable;
-// }
+bit smg_get_enable()
+{
+	return smg_enable;
+}
 // unsigned int xpt2046_get_adc_value()
 // {
 //     return XPT2046_ADC_Value;

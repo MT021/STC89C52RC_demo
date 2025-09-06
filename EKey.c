@@ -43,5 +43,5 @@ ekey scan_ekey()
 			return K4;	
 	
 		}
-		return None;
+		return eKey_None;
 }
