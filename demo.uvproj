@@ -501,6 +501,16 @@
               <FileType>5</FileType>
               <FilePath>.\Timer0.h</FilePath>
             </File>
+            <File>
+              <FileName>matrixkey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\matrixkey.c</FilePath>
+            </File>
+            <File>
+              <FileName>matrixkey.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\matrixkey.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
