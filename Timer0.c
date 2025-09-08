@@ -59,38 +59,40 @@ void Timer0_Routine() interrupt 1
 	TH0 = 0xDC;
 	counts++;
 	counts %= 100;
-	if(0 == counts % 50)
-	{
-		
-		//IR
-		ir_temp = IR_get_ctrl_char();
 
-		smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
-		smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
-		
-
-		//ADC
-		XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
-		smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
-		smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
-		smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
-		smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
-		
-		
-	}
-	// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
-#if SMG_EN
+	if (smg_enable)
 	{
+		if(0 == counts % 50)
+		{
+			
+			//IR
+			ir_temp = IR_get_ctrl_char();
+
+			smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
+			smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
+			
+
+			//ADC
+			XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
+			smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+			smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+			smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+			smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
+			
+			
+		}
+		// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
+
 		smg_display(smg_value_buf,1);
 	}
-#else
+	else
 	{
 		//matrixled
 		for(i = 0;i < 8;i++)
 		{
 			matrixled(i, arr_image_dynamic[i + offset]);
 		}
-		if( 0 == counts % 50)
+		if( 0 == counts % 20)
 		{
 			if(++offset > 56)
 			{
@@ -98,7 +100,6 @@ void Timer0_Routine() interrupt 1
 			}			
 		}
 	}
-#endif
 }
 
 void xpt2046_set_target(unsigned char target)

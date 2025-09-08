@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   EKEY                                                              09/05/2025 22:58:18 PAGE 1   
+C51 COMPILER V9.60.7.0   EKEY                                                              09/08/2025 08:51:52 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE EKEY
@@ -53,7 +53,7 @@ line level    source
   43   2            return K4;  
   44   2        
   45   2          }
-  46   1          return None;
+  46   1          return eKey_None;
   47   1      }
 
 
@@ -62,7 +62,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   EKEY                                                              09/05/2025 22:58:18 PAGE 2   
+C51 COMPILER V9.60.7.0   EKEY                                                              09/08/2025 08:51:52 PAGE 2   
 
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

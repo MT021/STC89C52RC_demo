@@ -33,7 +33,9 @@ void main()
 				break;
 			
 			case K4:
-				xpt2046_set_target(XPT2046_AUX);	//AIN3 J52
+				// xpt2046_set_target(XPT2046_AUX);	//AIN3 J52
+				smg_set_enable(!smg_get_enable());
+				P2_7 = !P2_7;
 				break;	
 
 			default:
