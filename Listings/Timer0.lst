@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 09:20:02 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
@@ -62,7 +62,7 @@ line level    source
   52   1      }
   53          
   54          void Timer0_Routine() interrupt 1
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 09:20:02 PAGE 2   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 2   
 
   55          {
   56   1        static unsigned char counts = 0;
@@ -126,7 +126,7 @@ line level    source
  114          
  115          bit smg_get_enable()
  116          {
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 09:20:02 PAGE 3   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 3   
 
  117   1        return smg_enable;
  118   1      }

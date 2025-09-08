@@ -22,19 +22,22 @@ void main()
 		{
 			case K1:
 				xpt2046_set_target(XPT2046_XP);  //AIN0 AD1
+				P2_7 = !P2_7;
 				break;
 			
 			case K2:
 				xpt2046_set_target(XPT2046_YP);	//AIN1 NTC1
+				P2_7 = !P2_7;
 				break;	
 			
 			case K3:
 				xpt2046_set_target(XPT2046_VBAT);	//AIN2 GR1
+				P2_7 = !P2_7;
 				break;
 			
 			case K4:
-				// xpt2046_set_target(XPT2046_AUX);	//AIN3 J52
-				smg_set_enable(!smg_get_enable());
+				xpt2046_set_target(XPT2046_AUX);	//AIN3 J52
+				// smg_set_enable(!smg_get_enable());
 				P2_7 = !P2_7;
 				break;	
 

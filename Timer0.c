@@ -3,6 +3,7 @@
 #include "smg.h"
 #include "IR.h"
 #include "matrixled.h"
+#include "delay.h"
 
 #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
 
@@ -60,8 +61,9 @@ void Timer0_Routine() interrupt 1
 	counts++;
 	counts %= 100;
 
-	if (smg_enable)
-	{
+	// if (smg_enable)
+	// {
+	#if SMG_EN
 		if(0 == counts % 50)
 		{
 			
@@ -84,9 +86,10 @@ void Timer0_Routine() interrupt 1
 		// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
 
 		smg_display(smg_value_buf,1);
-	}
-	else
-	{
+	// }
+	// else
+	// {
+	#else
 		//matrixled
 		for(i = 0;i < 8;i++)
 		{
@@ -99,7 +102,8 @@ void Timer0_Routine() interrupt 1
 				offset = 0;
 			}			
 		}
-	}
+	// }
+	#endif
 }
 
 void xpt2046_set_target(unsigned char target)
