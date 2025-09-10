@@ -1,16 +1,16 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              09/08/2025 19:14:30 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2025 20:28:10 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
-                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
 
 line level    source
 
    1          #include <REGX52.H>
    2          // #include "delay.h"
-   3          #include "IR.h"
+   3          //#include "IR.h"
    4          // #include "smg.h"
    5          #include "XPT2046.h"
    6          #include "PWM.h"
@@ -21,7 +21,7 @@ line level    source
   11          void main()
   12          {
   13   1      
-  14   1        IR_INT0_Init();
+  14   1      
   15   1        Timer0Init();
   16   1        PWM_Init(0xAE, 0xFF, 10, 5);
   17   1      
@@ -32,106 +32,109 @@ line level    source
   22   2          {
   23   3            case K1:
   24   3              xpt2046_set_target(XPT2046_XP);  //AIN0 AD1
-  25   3              break;
-  26   3            
-  27   3            case K2:
-  28   3              xpt2046_set_target(XPT2046_YP); //AIN1 NTC1
-  29   3              break;  
-  30   3            
-  31   3            case K3:
-  32   3              xpt2046_set_target(XPT2046_VBAT); //AIN2 GR1
-  33   3              break;
-  34   3            
-  35   3            case K4:
-  36   3              // xpt2046_set_target(XPT2046_AUX); //AIN3 J52
-  37   3              smg_set_enable(!smg_get_enable());
-  38   3              P2_7 = !P2_7;
-  39   3              break;  
-  40   3      
-  41   3            default:
-  42   3              break;
-  43   3          }
-  44   2      
-  45   2          //scan matrix key TO DO
-  46   2          switch (matrix_key_scan())
-  47   2          {
-  48   3            case mKey1:
-  49   3              P2_7 = !P2_7;
-  50   3              break;
-  51   3            
-  52   3            case mKey2:
-  53   3              P2_7 = !P2_7;
-  54   3              break;
-C51 COMPILER V9.60.7.0   MAIN                                                              09/08/2025 19:14:30 PAGE 2   
+  25   3              P2_7 = !P2_7;
+  26   3              break;
+  27   3            
+  28   3            case K2:
+  29   3              xpt2046_set_target(XPT2046_YP); //AIN1 NTC1
+  30   3              P2_7 = !P2_7;
+  31   3              break;  
+  32   3            
+  33   3            case K3:
+  34   3              xpt2046_set_target(XPT2046_VBAT); //AIN2 GR1
+  35   3              P2_7 = !P2_7;
+  36   3              break;
+  37   3            
+  38   3            case K4:
+  39   3              xpt2046_set_target(XPT2046_AUX);  //AIN3 J52
+  40   3              // smg_set_enable(!smg_get_enable());
+  41   3              P2_7 = !P2_7;
+  42   3              break;  
+  43   3      
+  44   3            default:
+  45   3              break;
+  46   3          }
+  47   2      
+  48   2          //scan matrix key TO DO
+  49   2          switch (matrix_key_scan())
+  50   2          {
+  51   3            case mKey1:
+  52   3              P2_7 = !P2_7;
+  53   3              break;
+  54   3            
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2025 20:28:10 PAGE 2   
 
-  55   3      
-  56   3            case mKey3:
-  57   3              P2_7 = !P2_7;
-  58   3              break;
-  59   3            
-  60   3            case mKey4:
-  61   3              P2_7 = !P2_7;
-  62   3              break;
-  63   3      
-  64   3            case mKey5:
-  65   3              P2_7 = !P2_7;
-  66   3              break;
-  67   3            
-  68   3            case mKey6:
-  69   3              P2_7 = !P2_7;
-  70   3              break;
-  71   3      
-  72   3            case mKey7:
-  73   3              P2_7 = !P2_7;
-  74   3              break;
-  75   3            
-  76   3            case mKey8:
-  77   3              P2_7 = !P2_7;
-  78   3              break;
-  79   3      
-  80   3            case mKey9:
-  81   3              P2_7 = !P2_7;
-  82   3              break;
-  83   3      
-  84   3            case mKey10:
-  85   3              P2_7 = !P2_7;
-  86   3              break;
-  87   3      
-  88   3            case mKey11:
-  89   3              P2_7 = !P2_7;
-  90   3              break;
-  91   3      
-  92   3            case mKey12:
-  93   3              P2_7 = !P2_7;
-  94   3              break;
-  95   3      
-  96   3            case mKey13:
-  97   3              P2_7 = !P2_7;
-  98   3              break;
-  99   3      
- 100   3            case mKey14:
- 101   3              P2_7 = !P2_7;
- 102   3              break;
- 103   3      
- 104   3            case mKey15:
- 105   3              P2_7 = !P2_7;
- 106   3              break;
- 107   3      
- 108   3            case mKey16:
- 109   3              P2_7 = !P2_7;
- 110   3              break;  
- 111   3      
- 112   3            default:
- 113   3              break;
- 114   3          }
- 115   2        }
- 116   1      }
-C51 COMPILER V9.60.7.0   MAIN                                                              09/08/2025 19:14:30 PAGE 3   
+  55   3            case mKey2:
+  56   3              P2_7 = !P2_7;
+  57   3              break;
+  58   3      
+  59   3            case mKey3:
+  60   3              P2_7 = !P2_7;
+  61   3              break;
+  62   3            
+  63   3            case mKey4:
+  64   3              P2_7 = !P2_7;
+  65   3              break;
+  66   3      
+  67   3            case mKey5:
+  68   3              P2_7 = !P2_7;
+  69   3              break;
+  70   3            
+  71   3            case mKey6:
+  72   3              P2_7 = !P2_7;
+  73   3              break;
+  74   3      
+  75   3            case mKey7:
+  76   3              P2_7 = !P2_7;
+  77   3              break;
+  78   3            
+  79   3            case mKey8:
+  80   3              P2_7 = !P2_7;
+  81   3              break;
+  82   3      
+  83   3            case mKey9:
+  84   3              P2_7 = !P2_7;
+  85   3              break;
+  86   3      
+  87   3            case mKey10:
+  88   3              P2_7 = !P2_7;
+  89   3              break;
+  90   3      
+  91   3            case mKey11:
+  92   3              P2_7 = !P2_7;
+  93   3              break;
+  94   3      
+  95   3            case mKey12:
+  96   3              P2_7 = !P2_7;
+  97   3              break;
+  98   3      
+  99   3            case mKey13:
+ 100   3              P2_7 = !P2_7;
+ 101   3              break;
+ 102   3      
+ 103   3            case mKey14:
+ 104   3              P2_7 = !P2_7;
+ 105   3              break;
+ 106   3      
+ 107   3            case mKey15:
+ 108   3              P2_7 = !P2_7;
+ 109   3              break;
+ 110   3      
+ 111   3            case mKey16:
+ 112   3              P2_7 = !P2_7;
+ 113   3              break;  
+ 114   3      
+ 115   3            default:
+ 116   3              break;
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2025 20:28:10 PAGE 3   
 
+ 117   3          }
+ 118   2        }
+ 119   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    211    ----
+   CODE SIZE        =    202    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

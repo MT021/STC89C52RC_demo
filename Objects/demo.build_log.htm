@@ -19,7 +19,7 @@ CPU DLL:         S8051.DLL V3.125.1.0
 Dialog DLL:      DP51.DLL V2.69.0.0 
 <h2>Project:</h2>
 C:\Keil_v5\C51\Study\demo\demo.uvproj
-Project File Date:  09/08/2025
+Project File Date:  09/10/2025
 
 <h2>Output:</h2>
 Build target 'Target 1'
@@ -35,11 +35,19 @@ compiling PWM.c...
 compiling EKey.c...
 compiling matrixled.c...
 compiling Timer0.c...
+Timer0.c(66): warning C280: 'i': unreferenced local variable
+Timer0.c(66): warning C280: 'offset': unreferenced local variable
 compiling matrixkey.c...
+compiling ds18b20.c...
+compiling nixie.c...
 linking...
-Program Size: data=117.3 xdata=0 code=2483
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECK_EDGE?DS18B20
+    CALLER1: ?PR?TIMER0_ROUTINE?TIMER0
+    CALLER2: ?C_C51STARTUP
+Program Size: data=9.3 xdata=133 code=4137
 creating hex file from ".\Objects\demo"...
-".\Objects\demo" - 0 Error(s), 0 Warning(s).
+".\Objects\demo" - 0 Error(s), 3 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

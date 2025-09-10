@@ -1,9 +1,11 @@
 #include <REGX52.H>
 #include "XPT2046.h"
 #include "smg.h"
-#include "IR.h"
+//#include "IR.h"
 #include "matrixled.h"
 #include "delay.h"
+//#include "nixie.h"
+#include "ds18b20.h"
 
 #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
 
@@ -15,9 +17,11 @@ unsigned int XPT2046_ADC_Value = 0;
 unsigned char smg_value_buf[8];
 bit smg_enable = 1;	// 1: enable smg, 0: disable smg and enable matrixled
 
+//ds18b20
+int ds18b20_temp = 0;
 
 //IR
-unsigned char ir_temp = 0;
+//unsigned char ir_temp = 0;
 
 
 // matrixled --ARE YOU OK !
@@ -45,11 +49,15 @@ void Timer0Init(void)		//10ms@11.0592MHz
 	EA = 1;
 
 	//smg
-	smg_value_buf[7] = 0X76;// Hex "H"
-	smg_value_buf[4] = 0x00;// gap between ADC and IR char
+	//smg_value_buf[7] = 0X76;// Hex "H"
+	//smg_value_buf[4] = 0x00;// gap between ADC and IR char
 
 	//matrixled
 	matrixled_init();
+	
+	//IR_INT0_Init();
+	singlebus_Init();
+	
 }
 
 void Timer0_Routine() interrupt 1
@@ -64,14 +72,31 @@ void Timer0_Routine() interrupt 1
 	// if (smg_enable)
 	// {
 	#if SMG_EN
-		if(0 == counts % 50)
+		if(0 == counts % 2)
 		{
 			
 			//IR
-			ir_temp = IR_get_ctrl_char();
+			//ir_temp = IR_get_ctrl_char();
+			
+			//ds18b20
+			ds18b20_temp  = ds18b20_readtemperature() * 10;
+			if(ds18b20_temp < 0)
+ 			{
+ 				smg_value_buf[4] = 0x40;
+ 				ds18b20_temp = -ds18b20_temp;
+ 			}
+ 			else
+ 			{
+ 				smg_value_buf[4] = 0x00;
+			}
+				smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
+				smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
+				smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
 
-			smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
-			smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
+
+
+//			smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
+//			smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
 			
 
 			//ADC

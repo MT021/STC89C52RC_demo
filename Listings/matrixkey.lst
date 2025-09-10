@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   MATRIXKEY                                                         09/08/2025 19:14:31 PAGE 1   
+C51 COMPILER V9.60.7.0   MATRIXKEY                                                         09/10/2025 20:28:11 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MATRIXKEY
 OBJECT MODULE PLACED IN .\Objects\matrixkey.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE matrixkey.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
-                    -\matrixkey.lst) TABS(2) OBJECT(.\Objects\matrixkey.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE matrixkey.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\matrixkey.lst) TABS(2) OBJECT(.\Objects\matrixkey.obj)
 
 line level    source
 
@@ -50,11 +50,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    121    ----
+   CODE SIZE        =    141    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =   ----    ----
-   DATA SIZE        =     18    ----
+   PDATA SIZE       =     18    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

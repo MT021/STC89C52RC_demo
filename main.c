@@ -1,6 +1,6 @@
 #include <REGX52.H>
 // #include "delay.h"
-#include "IR.h"
+//#include "IR.h"
 // #include "smg.h"
 #include "XPT2046.h"
 #include "PWM.h"
@@ -11,7 +11,7 @@
 void main()
 {
 
-	IR_INT0_Init();
+
 	Timer0Init();
 	PWM_Init(0xAE, 0xFF, 10, 5);
 

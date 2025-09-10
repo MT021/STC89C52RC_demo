@@ -1,150 +1,181 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
 OBJECT MODULE PLACED IN .\Objects\Timer0.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Timer0.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ti
-                    -mer0.lst) TABS(2) OBJECT(.\Objects\Timer0.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Timer0.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\Timer0.lst) TABS(2) OBJECT(.\Objects\Timer0.obj)
 
 line level    source
 
    1          #include <REGX52.H>
    2          #include "XPT2046.h"
    3          #include "smg.h"
-   4          #include "IR.h"
+   4          //#include "IR.h"
    5          #include "matrixled.h"
-   6          
-   7          #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
-   8          
-   9          //XPT2046_ADC
-  10          unsigned char XPT2046_target = XPT2046_VBAT; 
-  11          unsigned int XPT2046_ADC_Value = 0;
-  12          
-  13          //smg
-  14          unsigned char smg_value_buf[8];
-  15          bit smg_enable = 1; // 1: enable smg, 0: disable smg and enable matrixled
-  16          
-  17          
-  18          //IR
-  19          unsigned char ir_temp = 0;
-  20          
-  21          
-  22          // matrixled --ARE YOU OK !
-  23          // unsigned char i, offset = 0;
-  24          unsigned char code arr_image_dynamic[] = {
-  25                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  26                                0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
-  27                                0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
-  28                                0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
-  29                                0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
-  30                                0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
-  31                                0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
-  32                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
-  33                              };
-  34          
-  35          void Timer0Init(void)   //10ms@11.0592MHz
-  36          {
-  37   1        TMOD &= 0xF0;   
-  38   1        TMOD |= 0x01;   
-  39   1        TL0 = 0x00;   
-  40   1        TH0 = 0xDC;   
-  41   1        TF0 = 0;  
-  42   1        TR0 = 1;  
-  43   1        ET0 = 1;
-  44   1        EA = 1;
-  45   1      
-  46   1        //smg
-  47   1        smg_value_buf[7] = 0X76;// Hex "H"
-  48   1        smg_value_buf[4] = 0x00;// gap between ADC and IR char
-  49   1      
-  50   1        //matrixled
-  51   1        matrixled_init();
-  52   1      }
-  53          
-  54          void Timer0_Routine() interrupt 1
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 2   
+   6          #include "delay.h"
+   7          //#include "nixie.h"
+   8          #include "ds18b20.h"
+   9          
+  10          #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
+  11          
+  12          //XPT2046_ADC
+  13          unsigned char XPT2046_target = XPT2046_VBAT; 
+  14          unsigned int XPT2046_ADC_Value = 0;
+  15          
+  16          //smg
+  17          unsigned char smg_value_buf[8];
+  18          bit smg_enable = 1; // 1: enable smg, 0: disable smg and enable matrixled
+  19          
+  20          //ds18b20
+  21          int ds18b20_temp = 0;
+  22          
+  23          //IR
+  24          //unsigned char ir_temp = 0;
+  25          
+  26          
+  27          // matrixled --ARE YOU OK !
+  28          // unsigned char i, offset = 0;
+  29          unsigned char code arr_image_dynamic[] = {
+  30                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  31                                0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
+  32                                0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
+  33                                0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
+  34                                0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
+  35                                0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
+  36                                0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
+  37                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+  38                              };
+  39          
+  40          void Timer0Init(void)   //10ms@11.0592MHz
+  41          {
+  42   1        TMOD &= 0xF0;   
+  43   1        TMOD |= 0x01;   
+  44   1        TL0 = 0x00;   
+  45   1        TH0 = 0xDC;   
+  46   1        TF0 = 0;  
+  47   1        TR0 = 1;  
+  48   1        ET0 = 1;
+  49   1        EA = 1;
+  50   1      
+  51   1        //smg
+  52   1        //smg_value_buf[7] = 0X76;// Hex "H"
+  53   1        //smg_value_buf[4] = 0x00;// gap between ADC and IR char
+  54   1      
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 2   
 
-  55          {
-  56   1        static unsigned char counts = 0;
-  57   1        static unsigned char i, offset = 0;
-  58   1        TL0 = 0x00;   
-  59   1        TH0 = 0xDC;
-  60   1        counts++;
-  61   1        counts %= 100;
-  62   1      
-  63   1        if (smg_enable)
-  64   1        {
-  65   2          if(0 == counts % 50)
-  66   2          {
-  67   3            
-  68   3            //IR
-  69   3            ir_temp = IR_get_ctrl_char();
-  70   3      
-  71   3            smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
-  72   3            smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
-  73   3            
-  74   3      
-  75   3            //ADC
-  76   3            XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
-  77   3            smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
-  78   3            smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
-  79   3            smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
-  80   3            smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
-  81   3            
-  82   3            
-  83   3          }
-  84   2          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
-  85   2      
-  86   2          smg_display(smg_value_buf,1);
-  87   2        }
-  88   1        else
-  89   1        {
-  90   2          //matrixled
-  91   2          for(i = 0;i < 8;i++)
-  92   2          {
-  93   3            matrixled(i, arr_image_dynamic[i + offset]);
-  94   3          }
-  95   2          if( 0 == counts % 20)
-  96   2          {
-  97   3            if(++offset > 56)
-  98   3            {
-  99   4              offset = 0;
- 100   4            }     
- 101   3          }
- 102   2        }
- 103   1      }
- 104          
- 105          void xpt2046_set_target(unsigned char target)
- 106          {
- 107   1        XPT2046_target = target;
- 108   1      }
- 109          
- 110          void smg_set_enable(bit enable)
- 111          {
- 112   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
- 113   1      }
- 114          
- 115          bit smg_get_enable()
- 116          {
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/08/2025 19:14:31 PAGE 3   
+  55   1        //matrixled
+  56   1        matrixled_init();
+  57   1        
+  58   1        //IR_INT0_Init();
+  59   1        singlebus_Init();
+  60   1        
+  61   1      }
+  62          
+  63          void Timer0_Routine() interrupt 1
+  64          {
+  65   1        static unsigned char counts = 0;
+  66   1        static unsigned char i, offset = 0;
+  67   1        TL0 = 0x00;   
+  68   1        TH0 = 0xDC;
+  69   1        counts++;
+  70   1        counts %= 100;
+  71   1      
+  72   1        // if (smg_enable)
+  73   1        // {
+  74   1        #if SMG_EN
+  75   1          if(0 == counts % 2)
+  76   1          {
+  77   2            
+  78   2            //IR
+  79   2            //ir_temp = IR_get_ctrl_char();
+  80   2            
+  81   2            //ds18b20
+  82   2            ds18b20_temp  = ds18b20_readtemperature() * 10;
+  83   2            if(ds18b20_temp < 0)
+  84   2            {
+  85   3              smg_value_buf[4] = 0x40;
+  86   3              ds18b20_temp = -ds18b20_temp;
+  87   3            }
+  88   2            else
+  89   2            {
+  90   3              smg_value_buf[4] = 0x00;
+  91   3            }
+  92   2              smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
+  93   2              smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
+  94   2              smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
+  95   2      
+  96   2      
+  97   2      
+  98   2      //      smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
+  99   2      //      smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
+ 100   2            
+ 101   2      
+ 102   2            //ADC
+ 103   2            XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
+ 104   2            smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+ 105   2            smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+ 106   2            smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+ 107   2            smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
+ 108   2            
+ 109   2            
+ 110   2          }
+ 111   1          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
+ 112   1      
+ 113   1          smg_display(smg_value_buf,1);
+ 114   1        // }
+ 115   1        // else
+ 116   1        // {
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 3   
 
- 117   1        return smg_enable;
- 118   1      }
- 119          // unsigned int xpt2046_get_adc_value()
- 120          // {
- 121          //     return XPT2046_ADC_Value;
- 122          // }
+ 117   1        #else
+                  //matrixled
+                  for(i = 0;i < 8;i++)
+                  {
+                    matrixled(i, arr_image_dynamic[i + offset]);
+                  }
+                  if( 0 == counts % 20)
+                  {
+                    if(++offset > 56)
+                    {
+                      offset = 0;
+                    }     
+                  }
+                // }
+                #endif
+ 132   1      }
+*** WARNING C280 IN LINE 66 OF Timer0.c: 'i': unreferenced local variable
+*** WARNING C280 IN LINE 66 OF Timer0.c: 'offset': unreferenced local variable
+ 133          
+ 134          void xpt2046_set_target(unsigned char target)
+ 135          {
+ 136   1        XPT2046_target = target;
+ 137   1      }
+ 138          
+ 139          void smg_set_enable(bit enable)
+ 140          {
+ 141   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
+ 142   1      }
+ 143          
+ 144          bit smg_get_enable()
+ 145          {
+ 146   1        return smg_enable;
+ 147   1      }
+ 148          // unsigned int xpt2046_get_adc_value()
+ 149          // {
+ 150          //     return XPT2046_ADC_Value;
+ 151          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    304    ----
+   CODE SIZE        =    394    ----
    CONSTANT SIZE    =     64    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =   ----    ----
-   DATA SIZE        =     15    ----
+   PDATA SIZE       =     16    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1       1
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
