@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   IR                                                                09/10/2025 20:28:10 PAGE 1   
+C51 COMPILER V9.60.7.0   IR                                                                09/11/2025 09:23:03 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE IR
 OBJECT MODULE PLACED IN .\Objects\IR.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE IR.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
-                    -s\IR.lst) TABS(2) OBJECT(.\Objects\IR.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE IR.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\IR.lst
+                    -) TABS(2) OBJECT(.\Objects\IR.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52   5                }
   53   4      
   54   4                timecnt = 20;
-C51 COMPILER V9.60.7.0   IR                                                                09/10/2025 20:28:10 PAGE 2   
+C51 COMPILER V9.60.7.0   IR                                                                09/11/2025 09:23:03 PAGE 2   
 
   55   4                while(IR_Signal && timecnt)
   56   4                {
@@ -97,11 +97,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    389    ----
+   CODE SIZE        =    318    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =      4       5
-   DATA SIZE        =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       5
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

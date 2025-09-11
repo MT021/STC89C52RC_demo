@@ -3,9 +3,9 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.38.0.0
-Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: mei Merlin, mei, LIC=EXTQ1-CBJ22-3ALDP-M08P1-T15VB-KTPEC
+IDE-Version: ¦ÌVision V5.43.1.0
+Copyright (C) 2025 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: T MT, M, LIC=03LZX-HA0BL-83DMD-8JCJL-K3DTP-J0MZ2
  
 Tool Versions:
 Toolchain:       PK51 Prof. Developers Kit  Version: 9.60.7.0
@@ -18,36 +18,27 @@ Hex Converter:   OH51.exe V2.7.0.0
 CPU DLL:         S8051.DLL V3.125.1.0
 Dialog DLL:      DP51.DLL V2.69.0.0 
 <h2>Project:</h2>
-C:\Keil_v5\C51\Study\demo\demo.uvproj
-Project File Date:  09/10/2025
+D:\MT\study\MCU\STC89C52RC_demo\demo.uvproj
+Project File Date:  09/11/2025
 
 <h2>Output:</h2>
 Build target 'Target 1'
-compiling main.c...
-compiling UART.c...
-compiling I2C.c...
-compiling XPT2046.c...
-compiling AT24C02.c...
-compiling delay.c...
-compiling IR.c...
-compiling smg.c...
-compiling PWM.c...
-compiling EKey.c...
-compiling matrixled.c...
 compiling Timer0.c...
 Timer0.c(66): warning C280: 'i': unreferenced local variable
 Timer0.c(66): warning C280: 'offset': unreferenced local variable
-compiling matrixkey.c...
-compiling ds18b20.c...
 compiling nixie.c...
 linking...
 *** WARNING L15: MULTIPLE CALL TO SEGMENT
     SEGMENT: ?PR?CHECK_EDGE?DS18B20
     CALLER1: ?PR?TIMER0_ROUTINE?TIMER0
     CALLER2: ?C_C51STARTUP
-Program Size: data=9.3 xdata=133 code=4137
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_DELAY1MS?DELAY
+    CALLER1: ?PR?TIMER0_ROUTINE?TIMER0
+    CALLER2: ?C_C51STARTUP
+Program Size: data=119.3 xdata=0 code=3592
 creating hex file from ".\Objects\demo"...
-".\Objects\demo" - 0 Error(s), 3 Warning(s).
+".\Objects\demo" - 0 Error(s), 4 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

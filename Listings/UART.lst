@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   UART                                                              09/10/2025 20:28:10 PAGE 1   
+C51 COMPILER V9.60.7.0   UART                                                              09/11/2025 09:23:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART
 OBJECT MODULE PLACED IN .\Objects\UART.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE UART.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
-                    -ngs\UART.lst) TABS(2) OBJECT(.\Objects\UART.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE UART.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\UART
+                    -.lst) TABS(2) OBJECT(.\Objects\UART.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52   4              if(rbytes[count] == 0x24)
   53   4              {
   54   5                rflag = 1;
-C51 COMPILER V9.60.7.0   UART                                                              09/10/2025 20:28:10 PAGE 2   
+C51 COMPILER V9.60.7.0   UART                                                              09/11/2025 09:23:02 PAGE 2   
 
   55   5                count = 0;
   56   5              }
@@ -81,11 +81,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    165    ----
+   CODE SIZE        =    139    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =      9       3
-   DATA SIZE        =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       3
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.

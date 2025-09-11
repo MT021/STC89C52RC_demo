@@ -5,7 +5,6 @@
 ".\Objects\AT24C02.obj",
 ".\Objects\delay.obj",
 ".\Objects\IR.obj",
-".\Objects\smg.obj",
 ".\Objects\PWM.obj",
 ".\Objects\EKey.obj",
 ".\Objects\matrixled.obj",

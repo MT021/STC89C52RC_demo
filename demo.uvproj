@@ -186,7 +186,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>1</MemoryModel>
+            <MemoryModel>0</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
@@ -440,16 +440,6 @@
               <FileName>IR.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\IR.h</FilePath>
-            </File>
-            <File>
-              <FileName>smg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\smg.c</FilePath>
-            </File>
-            <File>
-              <FileName>smg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\smg.h</FilePath>
             </File>
             <File>
               <FileName>PWM.c</FileName>

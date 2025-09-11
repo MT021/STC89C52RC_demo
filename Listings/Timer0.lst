@@ -1,20 +1,20 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 11:45:34 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
 OBJECT MODULE PLACED IN .\Objects\Timer0.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Timer0.c COMPACT OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
-                    -tings\Timer0.lst) TABS(2) OBJECT(.\Objects\Timer0.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Timer0.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ti
+                    -mer0.lst) TABS(2) OBJECT(.\Objects\Timer0.obj)
 
 line level    source
 
    1          #include <REGX52.H>
    2          #include "XPT2046.h"
-   3          #include "smg.h"
+   3          //#include "smg.h"
    4          //#include "IR.h"
    5          #include "matrixled.h"
    6          #include "delay.h"
-   7          //#include "nixie.h"
+   7          #include "nixie.h"
    8          #include "ds18b20.h"
    9          
   10          #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
@@ -62,7 +62,7 @@ line level    source
   52   1        //smg_value_buf[7] = 0X76;// Hex "H"
   53   1        //smg_value_buf[4] = 0x00;// gap between ADC and IR char
   54   1      
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 2   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 11:45:34 PAGE 2   
 
   55   1        //matrixled
   56   1        matrixled_init();
@@ -84,51 +84,62 @@ line level    source
   72   1        // if (smg_enable)
   73   1        // {
   74   1        #if SMG_EN
-  75   1          if(0 == counts % 2)
-  76   1          {
-  77   2            
-  78   2            //IR
-  79   2            //ir_temp = IR_get_ctrl_char();
-  80   2            
-  81   2            //ds18b20
-  82   2            ds18b20_temp  = ds18b20_readtemperature() * 10;
-  83   2            if(ds18b20_temp < 0)
-  84   2            {
-  85   3              smg_value_buf[4] = 0x40;
-  86   3              ds18b20_temp = -ds18b20_temp;
-  87   3            }
-  88   2            else
-  89   2            {
-  90   3              smg_value_buf[4] = 0x00;
-  91   3            }
-  92   2              smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
-  93   2              smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
-  94   2              smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
-  95   2      
-  96   2      
-  97   2      
-  98   2      //      smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
-  99   2      //      smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
- 100   2            
- 101   2      
- 102   2            //ADC
- 103   2            XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
- 104   2            smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
- 105   2            smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
- 106   2            smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
- 107   2            smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
- 108   2            
- 109   2            
- 110   2          }
- 111   1          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
- 112   1      
- 113   1          smg_display(smg_value_buf,1);
- 114   1        // }
- 115   1        // else
- 116   1        // {
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/10/2025 20:28:11 PAGE 3   
+  75   1      //    if(0 == counts % 2)
+  76   1      //    {
+  77   1            
+  78   1            //IR
+  79   1            //ir_temp = IR_get_ctrl_char();
+  80   1            
+  81   1            //ds18b20
+  82   1            ds18b20_temp  = ds18b20_readtemperature() * 10;
+  83   1            if(ds18b20_temp < 0)
+  84   1            {
+  85   2      //        smg_value_buf[4] = 0x40;
+  86   2              nixie(4, 16, 0x40);
+  87   2              ds18b20_temp = -ds18b20_temp;
+  88   2            }
+  89   1            else
+  90   1            {
+  91   2      //        smg_value_buf[4] = 0x00;
+  92   2              nixie(4, 16, 0);
+  93   2            }
+  94   1      //        smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
+  95   1      //        smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
+  96   1      //        smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
+  97   1              
+  98   1            nixie(5, ds18b20_temp / 100, 0);
+  99   1            nixie(6, (ds18b20_temp / 10) % 10, 0x80);
+ 100   1            nixie(7, ds18b20_temp % 10, 0);
+ 101   1      //      smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
+ 102   1      //      smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
+ 103   1            
+ 104   1      
+ 105   1            //ADC
+ 106   1            if(0 == counts % 15)
+ 107   1            {
+ 108   2              XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
+ 109   2      //        smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+ 110   2      //        smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+ 111   2      //        smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+ 112   2      //        smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);  
+ 113   2                
+ 114   2              nixie(0, XPT2046_ADC_Value / 1000, 0);
+ 115   2              nixie(1, XPT2046_ADC_Value / 100 % 10, 0);
+ 116   2              nixie(2, XPT2046_ADC_Value / 10 % 10, 0);
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 11:45:34 PAGE 3   
 
- 117   1        #else
+ 117   2              nixie(3, XPT2046_ADC_Value % 10, 0);
+ 118   2            }
+ 119   1            
+ 120   1            
+ 121   1      //    }
+ 122   1          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
+ 123   1      
+ 124   1      //    smg_display(smg_value_buf,1);
+ 125   1        // }
+ 126   1        // else
+ 127   1        // {
+ 128   1        #else
                   //matrixled
                   for(i = 0;i < 8;i++)
                   {
@@ -143,36 +154,36 @@ line level    source
                   }
                 // }
                 #endif
- 132   1      }
+ 143   1      }
 *** WARNING C280 IN LINE 66 OF Timer0.c: 'i': unreferenced local variable
 *** WARNING C280 IN LINE 66 OF Timer0.c: 'offset': unreferenced local variable
- 133          
- 134          void xpt2046_set_target(unsigned char target)
- 135          {
- 136   1        XPT2046_target = target;
- 137   1      }
- 138          
- 139          void smg_set_enable(bit enable)
- 140          {
- 141   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
- 142   1      }
- 143          
- 144          bit smg_get_enable()
- 145          {
- 146   1        return smg_enable;
- 147   1      }
- 148          // unsigned int xpt2046_get_adc_value()
- 149          // {
- 150          //     return XPT2046_ADC_Value;
- 151          // }
+ 144          
+ 145          void xpt2046_set_target(unsigned char target)
+ 146          {
+ 147   1        XPT2046_target = target;
+ 148   1      }
+ 149          
+ 150          void smg_set_enable(bit enable)
+ 151          {
+ 152   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
+ 153   1      }
+ 154          
+ 155          bit smg_get_enable()
+ 156          {
+ 157   1        return smg_enable;
+ 158   1      }
+ 159          // unsigned int xpt2046_get_adc_value()
+ 160          // {
+ 161          //     return XPT2046_ADC_Value;
+ 162          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    394    ----
+   CODE SIZE        =    335    ----
    CONSTANT SIZE    =     64    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =     16    ----
-   DATA SIZE        =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     16    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1       1
 END OF MODULE INFORMATION.
