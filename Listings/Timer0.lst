@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 13:25:07 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 20:15:39 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
@@ -10,12 +10,12 @@ line level    source
 
    1          #include <REGX52.H>
    2          #include "XPT2046.h"
-   3          //#include "smg.h"
-   4          //#include "IR.h"
+   3          #include "smg.h"
+   4          #include "IR.h"
    5          #include "matrixled.h"
    6          #include "delay.h"
-   7          #include "nixie.h"
-   8          #include "ds18b20.h"
+   7          //#include "nixie.h"
+   8          //#include "ds18b20.h"
    9          
   10          #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
   11          
@@ -31,11 +31,11 @@ line level    source
   21          int ds18b20_temp = 0;
   22          
   23          //IR
-  24          //unsigned char ir_temp = 0;
+  24          unsigned char ir_temp = 0;
   25          
   26          
   27          // matrixled --ARE YOU OK !
-  28          // unsigned char i, offset = 0;
+  28          unsigned char i, offset = 0;
   29          unsigned char code arr_image_dynamic[] = {
   30                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   31                                0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
@@ -59,15 +59,15 @@ line level    source
   49   1        EA = 1;
   50   1      
   51   1        //smg
-  52   1        //smg_value_buf[7] = 0X76;// Hex "H"
-  53   1        //smg_value_buf[4] = 0x00;// gap between ADC and IR char
+  52   1        smg_value_buf[7] = 0X76;// Hex "H"
+  53   1        smg_value_buf[4] = 0x00;// gap between ADC and IR char
   54   1      
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 13:25:07 PAGE 2   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 20:15:39 PAGE 2   
 
   55   1        //matrixled
   56   1        matrixled_init();
   57   1        
-  58   1        //IR_INT0_Init();
+  58   1        IR_INT0_Init();
   59   1      //  singlebus_Init();
   60   1        
   61   1      }
@@ -78,69 +78,46 @@ line level    source
   66   1        static unsigned char i, offset = 0;
   67   1        TL0 = 0x00;   
   68   1        TH0 = 0xDC;
-  69   1        
+  69   1        counts++; 
   70   1        counts %= 100;
   71   1      
-  72   1        // if (smg_enable)
-  73   1        // {
-  74   1        #if SMG_EN
-  75   1      //    if(0 == counts % 2)
-  76   1      //    {
-  77   1            
-  78   1            //IR
-  79   1            //ir_temp = IR_get_ctrl_char();
-  80   1            
-  81   1            //ds18b20
-  82   1            ds18b20_temp  = ds18b20_readtemperature() * 10;
-  83   1            if(ds18b20_temp < 0)
-  84   1            {
-  85   2      //        smg_value_buf[4] = 0x40;
-  86   2              nixie(4, 16, 0x40);
-  87   2              ds18b20_temp = -ds18b20_temp;
-  88   2            }
-  89   1            else
-  90   1            {
-  91   2      //        smg_value_buf[4] = 0x00;
-  92   2              nixie(4, 16, 0);
-  93   2            }
-  94   1      //        smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
-  95   1      //        smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
-  96   1      //        smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
-  97   1              
-  98   1            nixie(5, ds18b20_temp / 100, 0);
-  99   1            nixie(6, (ds18b20_temp / 10) % 10, 0x80);
- 100   1            nixie(7, ds18b20_temp % 10, 0);
- 101   1      //      smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
- 102   1      //      smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
- 103   1            
+  72   1        #if SMG_EN
+  73   1            
+  74   1            //IR
+  75   1            ir_temp = IR_get_ctrl_char();
+  76   1            smg_value_buf[5] = get_smg_code(ir_temp / 16);
+  77   1            smg_value_buf[6] = get_smg_code(ir_temp % 16);
+  78   1            //ds18b20
+  79   1      //      ds18b20_temp  = ds18b20_readtemperature() * 10;
+  80   1      //      if(ds18b20_temp < 0)
+  81   1      //      {
+  82   1      //        smg_value_buf[4] = 0x40;
+  83   1      //        ds18b20_temp = -ds18b20_temp;
+  84   1      //      }
+  85   1      //      else
+  86   1      //      {
+  87   1      //        smg_value_buf[4] = 0x00;
+  88   1      //      }
+  89   1      //      smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
+  90   1      //      smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
+  91   1      //      smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
+  92   1      
+  93   1            //ADC
+  94   1            if(0 == counts % 15)
+  95   1            {
+  96   2              XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
+  97   2              
+  98   2              smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+  99   2              smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+ 100   2              smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+ 101   2              smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
+ 102   2            }
+ 103   1            smg_display(smg_value_buf, 1);
  104   1      
- 105   1            //ADC
- 106   1            if(0 == counts % 15)
- 107   1            {
- 108   2              XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
- 109   2      //        smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
- 110   2      //        smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
- 111   2      //        smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
- 112   2      //        smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);  
- 113   2                
- 114   2      
- 115   2            }
- 116   1            nixie(0, XPT2046_ADC_Value / 1000, 0);
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 13:25:07 PAGE 3   
-
- 117   1            nixie(1, XPT2046_ADC_Value / 100 % 10, 0);
- 118   1            nixie(2, XPT2046_ADC_Value / 10 % 10, 0);
- 119   1            nixie(3, XPT2046_ADC_Value % 10, 0);
- 120   1            
- 121   1            counts++;
- 122   1      //    }
- 123   1          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
- 124   1      
- 125   1      //    smg_display(smg_value_buf,1);
- 126   1        // }
- 127   1        // else
- 128   1        // {
- 129   1        #else
+ 105   1      
+ 106   1          // show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
+ 107   1      
+ 108   1        #else
                   //matrixled
                   for(i = 0;i < 8;i++)
                   {
@@ -149,42 +126,43 @@ line level    source
                   if( 0 == counts % 20)
                   {
                     if(++offset > 56)
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/11/2025 20:15:39 PAGE 3   
+
                     {
                       offset = 0;
                     }     
                   }
-                // }
                 #endif
- 144   1      }
+ 122   1      }
 *** WARNING C280 IN LINE 66 OF Timer0.c: 'i': unreferenced local variable
 *** WARNING C280 IN LINE 66 OF Timer0.c: 'offset': unreferenced local variable
- 145          
- 146          void xpt2046_set_target(unsigned char target)
- 147          {
- 148   1        XPT2046_target = target;
- 149   1      }
- 150          
- 151          void smg_set_enable(bit enable)
- 152          {
- 153   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
- 154   1      }
- 155          
- 156          bit smg_get_enable()
- 157          {
- 158   1        return smg_enable;
- 159   1      }
- 160          // unsigned int xpt2046_get_adc_value()
- 161          // {
- 162          //     return XPT2046_ADC_Value;
- 163          // }
+ 123          
+ 124          void xpt2046_set_target(unsigned char target)
+ 125          {
+ 126   1        XPT2046_target = target;
+ 127   1      }
+ 128          
+ 129          void smg_set_enable(bit enable)
+ 130          {
+ 131   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
+ 132   1      }
+ 133          
+ 134          bit smg_get_enable()
+ 135          {
+ 136   1        return smg_enable;
+ 137   1      }
+ 138          // unsigned int xpt2046_get_adc_value()
+ 139          // {
+ 140          //     return XPT2046_ADC_Value;
+ 141          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    336    ----
+   CODE SIZE        =    251    ----
    CONSTANT SIZE    =     64    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     16    ----
+   DATA SIZE        =     19    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1       1
 END OF MODULE INFORMATION.

@@ -177,7 +177,7 @@
           </Flash1>
           <bUseTDR>0</bUseTDR>
           <Flash2></Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -382,26 +382,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\UART.h</FilePath>
-            </File>
-            <File>
-              <FileName>I2C.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\I2C.c</FilePath>
-            </File>
-            <File>
-              <FileName>I2C.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\I2C.h</FilePath>
-            </File>
-            <File>
               <FileName>XPT2046.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\XPT2046.c</FilePath>
@@ -412,16 +392,6 @@
               <FilePath>.\XPT2046.h</FilePath>
             </File>
             <File>
-              <FileName>AT24C02.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\AT24C02.c</FilePath>
-            </File>
-            <File>
-              <FileName>AT24C02.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\AT24C02.h</FilePath>
-            </File>
-            <File>
               <FileName>delay.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\delay.h</FilePath>
@@ -430,16 +400,6 @@
               <FileName>delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>IR.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\IR.c</FilePath>
-            </File>
-            <File>
-              <FileName>IR.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\IR.h</FilePath>
             </File>
             <File>
               <FileName>PWM.c</FileName>
@@ -502,14 +462,24 @@
               <FilePath>.\ds18b20.h</FilePath>
             </File>
             <File>
-              <FileName>nixie.c</FileName>
+              <FileName>smg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\nixie.c</FilePath>
+              <FilePath>.\smg.c</FilePath>
             </File>
             <File>
-              <FileName>nixie.h</FileName>
+              <FileName>smg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\nixie.h</FilePath>
+              <FilePath>.\smg.h</FilePath>
+            </File>
+            <File>
+              <FileName>IR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\IR.c</FilePath>
+            </File>
+            <File>
+              <FileName>IR.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\IR.h</FilePath>
             </File>
           </Files>
         </Group>

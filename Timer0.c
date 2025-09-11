@@ -1,11 +1,11 @@
 #include <REGX52.H>
 #include "XPT2046.h"
-//#include "smg.h"
-//#include "IR.h"
+#include "smg.h"
+#include "IR.h"
 #include "matrixled.h"
 #include "delay.h"
-#include "nixie.h"
-#include "ds18b20.h"
+//#include "nixie.h"
+//#include "ds18b20.h"
 
 #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
 
@@ -21,11 +21,11 @@ bit smg_enable = 1;	// 1: enable smg, 0: disable smg and enable matrixled
 int ds18b20_temp = 0;
 
 //IR
-//unsigned char ir_temp = 0;
+unsigned char ir_temp = 0;
 
 
 // matrixled --ARE YOU OK !
-// unsigned char i, offset = 0;
+unsigned char i, offset = 0;
 unsigned char code arr_image_dynamic[] = {
 											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
@@ -49,13 +49,13 @@ void Timer0Init(void)		//10ms@11.0592MHz
 	EA = 1;
 
 	//smg
-	//smg_value_buf[7] = 0X76;// Hex "H"
-	//smg_value_buf[4] = 0x00;// gap between ADC and IR char
+	smg_value_buf[7] = 0X76;// Hex "H"
+	smg_value_buf[4] = 0x00;// gap between ADC and IR char
 
 	//matrixled
 	matrixled_init();
 	
-	//IR_INT0_Init();
+	IR_INT0_Init();
 //	singlebus_Init();
 	
 }
@@ -66,66 +66,45 @@ void Timer0_Routine() interrupt 1
 	static unsigned char i, offset = 0;
 	TL0 = 0x00;		
 	TH0 = 0xDC;
-	
+	counts++;	
 	counts %= 100;
 
-	// if (smg_enable)
-	// {
 	#if SMG_EN
-//		if(0 == counts % 2)
-//		{
 			
 			//IR
-			//ir_temp = IR_get_ctrl_char();
-			
+			ir_temp = IR_get_ctrl_char();
+			smg_value_buf[5] = get_smg_code(ir_temp / 16);
+			smg_value_buf[6] = get_smg_code(ir_temp % 16);
 			//ds18b20
-			ds18b20_temp  = ds18b20_readtemperature() * 10;
-			if(ds18b20_temp < 0)
- 			{
-// 				smg_value_buf[4] = 0x40;
-				nixie(4, 16, 0x40);
- 				ds18b20_temp = -ds18b20_temp;
- 			}
- 			else
- 			{
-// 				smg_value_buf[4] = 0x00;
-				nixie(4, 16, 0);
-			}
-//				smg_value_buf[5] = get_smg_code((ds18b20_temp % 1000) /100);
-//				smg_value_buf[6] = get_smg_code((ds18b20_temp % 100) / 10) | 0x80;
-//				smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
-				
-			nixie(5, ds18b20_temp / 100, 0);
-			nixie(6, (ds18b20_temp / 10) % 10, 0x80);
-			nixie(7, ds18b20_temp % 10, 0);
-//			smg_value_buf[5] = get_smg_code(ir_temp/16);//十位 hex
-//			smg_value_buf[6] = get_smg_code(ir_temp%16);//个位 hex
-			
+//			ds18b20_temp  = ds18b20_readtemperature() * 10;
+//			if(ds18b20_temp < 0)
+// 			{
+//				smg_value_buf[4] = 0x40;
+// 				ds18b20_temp = -ds18b20_temp;
+// 			}
+// 			else
+// 			{
+//				smg_value_buf[4] = 0x00;
+//			}
+//			smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
+//			smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
+//			smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
 
 			//ADC
 			if(0 == counts % 15)
 			{
 				XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
-//				smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
-//				smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
-//				smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
-//				smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);	
-					
-
+				
+				smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+				smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+				smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+				smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
 			}
-			nixie(0, XPT2046_ADC_Value / 1000, 0);
-			nixie(1, XPT2046_ADC_Value / 100 % 10, 0);
-			nixie(2, XPT2046_ADC_Value / 10 % 10, 0);
-			nixie(3, XPT2046_ADC_Value % 10, 0);
-			
-			counts++;
-//		}
+			smg_display(smg_value_buf, 1);
+
+
 		// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
 
-//		smg_display(smg_value_buf,1);
-	// }
-	// else
-	// {
 	#else
 		//matrixled
 		for(i = 0;i < 8;i++)
@@ -139,7 +118,6 @@ void Timer0_Routine() interrupt 1
 				offset = 0;
 			}			
 		}
-	// }
 	#endif
 }
 
