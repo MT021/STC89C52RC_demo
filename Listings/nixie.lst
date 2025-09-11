@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   NIXIE                                                             09/11/2025 11:45:34 PAGE 1   
+C51 COMPILER V9.60.7.0   NIXIE                                                             09/11/2025 13:25:07 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE NIXIE
@@ -28,7 +28,7 @@ line level    source
   18   2          case 7: P2_4 = 0; P2_3 = 0; P2_2 = 0; break;
   19   2        }
   20   1        P0 = numbers[number] | addtional_value;
-  21   1        Delay1ms(1);
+  21   1        delay_10us(100);
   22   1        P0 = 0x00;
   23   1      }
 

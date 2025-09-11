@@ -56,7 +56,7 @@ void Timer0Init(void)		//10ms@11.0592MHz
 	matrixled_init();
 	
 	//IR_INT0_Init();
-	singlebus_Init();
+//	singlebus_Init();
 	
 }
 
@@ -66,7 +66,7 @@ void Timer0_Routine() interrupt 1
 	static unsigned char i, offset = 0;
 	TL0 = 0x00;		
 	TH0 = 0xDC;
-	counts++;
+	
 	counts %= 100;
 
 	// if (smg_enable)
@@ -111,13 +111,14 @@ void Timer0_Routine() interrupt 1
 //				smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
 //				smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);	
 					
-				nixie(0, XPT2046_ADC_Value / 1000, 0);
-				nixie(1, XPT2046_ADC_Value / 100 % 10, 0);
-				nixie(2, XPT2046_ADC_Value / 10 % 10, 0);
-				nixie(3, XPT2046_ADC_Value % 10, 0);
+
 			}
+			nixie(0, XPT2046_ADC_Value / 1000, 0);
+			nixie(1, XPT2046_ADC_Value / 100 % 10, 0);
+			nixie(2, XPT2046_ADC_Value / 10 % 10, 0);
+			nixie(3, XPT2046_ADC_Value % 10, 0);
 			
-			
+			counts++;
 //		}
 		// show on nixie(matrixled is conflict with smg, use matrixled only when J24 connect to GND)
 

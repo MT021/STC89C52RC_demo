@@ -18,6 +18,6 @@ void nixie(unsigned char location, unsigned char number, unsigned char addtional
 		case 7: P2_4 = 0; P2_3 = 0; P2_2 = 0; break;
 	}
 	P0 = numbers[number] | addtional_value;
-	Delay1ms(1);
+	delay_10us(100);
 	P0 = 0x00;
 }
