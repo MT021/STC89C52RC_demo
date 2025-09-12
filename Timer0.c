@@ -18,14 +18,14 @@ unsigned char smg_value_buf[8];
 bit smg_enable = 1;	// 1: enable smg, 0: disable smg and enable matrixled
 
 //ds18b20
-int ds18b20_temp = 0;
+//int ds18b20_temp = 0;
 
 //IR
-unsigned char ir_temp = 0;
+//unsigned char ir_temp = 0;
 
 
 // matrixled --ARE YOU OK !
-unsigned char i, offset = 0;
+//unsigned char i, offset = 0;
 unsigned char code arr_image_dynamic[] = {
 											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
@@ -63,7 +63,9 @@ void Timer0Init(void)		//10ms@11.0592MHz
 void Timer0_Routine() interrupt 1
 {
 	static unsigned char counts = 0;
-	static unsigned char i, offset = 0;
+//	static unsigned char i, offset = 0;
+	unsigned char ir_temp = 0;
+	
 	TL0 = 0x00;		
 	TH0 = 0xDC;
 	counts++;	
