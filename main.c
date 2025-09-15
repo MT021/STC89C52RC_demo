@@ -3,17 +3,19 @@
 //#include "IR.h"
 // #include "smg.h"
 #include "XPT2046.h"
-#include "PWM.h"
+//#include "PWM.h"
 #include "Timer0.h"
 #include "EKey.h"
 #include "matrixkey.h"
+#include "SG90.h"
 
 void main()
 {
 
 
 	Timer0Init();
-	PWM_Init(0xAE, 0xFF, 10, 5);
+	PWM_Motor_Init();
+//	PWM_Init(0xAE, 0xFF, 10, 5);
 
 	while(1)
 	{
@@ -49,22 +51,27 @@ void main()
 		switch (matrix_key_scan())
 		{
 			case mKey1:
+				PWM_Motor_Set_Threshold(1);
 				P2_7 = !P2_7;
 				break;
 			
 			case mKey2:
+				PWM_Motor_Set_Threshold(2);
 				P2_7 = !P2_7;
 				break;
 
 			case mKey3:
+				PWM_Motor_Set_Threshold(3);
 				P2_7 = !P2_7;
 				break;
 			
 			case mKey4:
+				PWM_Motor_Set_Threshold(4);
 				P2_7 = !P2_7;
 				break;
 
 			case mKey5:
+				PWM_Motor_Set_Threshold(5);
 				P2_7 = !P2_7;
 				break;
 			

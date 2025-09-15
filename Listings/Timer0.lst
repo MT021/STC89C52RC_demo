@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/12/2025 23:10:19 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 16:32:27 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
@@ -62,7 +62,7 @@ line level    source
   52   1        smg_value_buf[7] = 0X76;// Hex "H"
   53   1        smg_value_buf[4] = 0x00;// gap between ADC and IR char
   54   1      
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/12/2025 23:10:19 PAGE 2   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 16:32:27 PAGE 2   
 
   55   1        //matrixled
   56   1        matrixled_init();
@@ -126,7 +126,7 @@ line level    source
                     matrixled(i, arr_image_dynamic[i + offset]);
                   }
                   if( 0 == counts % 20)
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/12/2025 23:10:19 PAGE 3   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 16:32:27 PAGE 3   
 
                   {
                     if(++offset > 56)

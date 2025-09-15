@@ -402,16 +402,6 @@
               <FilePath>.\delay.c</FilePath>
             </File>
             <File>
-              <FileName>PWM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\PWM.c</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\PWM.h</FilePath>
-            </File>
-            <File>
               <FileName>EKey.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\EKey.c</FilePath>
@@ -480,6 +470,16 @@
               <FileName>IR.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\IR.h</FilePath>
+            </File>
+            <File>
+              <FileName>SG90.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SG90.c</FilePath>
+            </File>
+            <File>
+              <FileName>SG90.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SG90.h</FilePath>
             </File>
           </Files>
         </Group>

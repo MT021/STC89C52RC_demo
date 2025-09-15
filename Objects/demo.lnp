@@ -1,14 +1,14 @@
 ".\Objects\main.obj",
 ".\Objects\XPT2046.obj",
 ".\Objects\delay.obj",
-".\Objects\PWM.obj",
 ".\Objects\EKey.obj",
 ".\Objects\matrixled.obj",
 ".\Objects\Timer0.obj",
 ".\Objects\matrixkey.obj",
 ".\Objects\ds18b20.obj",
 ".\Objects\smg.obj",
-".\Objects\IR.obj" 
+".\Objects\IR.obj",
+".\Objects\SG90.obj" 
 TO ".\Objects\demo" 
 PRINT(".\Listings\demo.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 
