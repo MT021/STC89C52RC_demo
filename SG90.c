@@ -32,8 +32,8 @@ void PWM_Motor_Init()
 void PWM_Motor_Timer1Routine() interrupt 3
 {
 	static unsigned char counter = 0;
-	TL0 = 0x33;
-	TH0 = 0xFE;
+	TL1 = 0x33;
+	TH1 = 0xFE;
 	
 	counter++;
 	counter %= 40;//500us * 40 = 20ms

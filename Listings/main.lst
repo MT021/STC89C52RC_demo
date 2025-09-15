@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 16:32:46 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 18:47:54 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -14,7 +14,7 @@ line level    source
    4          // #include "smg.h"
    5          #include "XPT2046.h"
    6          //#include "PWM.h"
-   7          #include "Timer0.h"
+   7          //#include "Timer0.h"
    8          #include "EKey.h"
    9          #include "matrixkey.h"
   10          #include "SG90.h"
@@ -23,7 +23,7 @@ line level    source
   13          {
   14   1      
   15   1      
-  16   1        Timer0Init();
+  16   1      //  Timer0Init();
   17   1        PWM_Motor_Init();
   18   1      //  PWM_Init(0xAE, 0xFF, 10, 5);
   19   1      
@@ -33,22 +33,22 @@ line level    source
   23   2          switch (scan_ekey())
   24   2          {
   25   3            case K1:
-  26   3              xpt2046_set_target(XPT2046_XP);  //AIN0 AD1
+  26   3      //        xpt2046_set_target(XPT2046_XP);  //AIN0 AD1
   27   3              P2_7 = !P2_7;
   28   3              break;
   29   3            
   30   3            case K2:
-  31   3              xpt2046_set_target(XPT2046_YP); //AIN1 NTC1
+  31   3      //        xpt2046_set_target(XPT2046_YP); //AIN1 NTC1
   32   3              P2_7 = !P2_7;
   33   3              break;  
   34   3            
   35   3            case K3:
-  36   3              xpt2046_set_target(XPT2046_VBAT); //AIN2 GR1
+  36   3      //        xpt2046_set_target(XPT2046_VBAT); //AIN2 GR1
   37   3              P2_7 = !P2_7;
   38   3              break;
   39   3            
   40   3            case K4:
-  41   3              xpt2046_set_target(XPT2046_AUX);  //AIN3 J52
+  41   3      //        xpt2046_set_target(XPT2046_AUX);  //AIN3 J52
   42   3              // smg_set_enable(!smg_get_enable());
   43   3              P2_7 = !P2_7;
   44   3              break;  
@@ -62,7 +62,7 @@ line level    source
   52   2          {
   53   3            case mKey1:
   54   3              PWM_Motor_Set_Threshold(1);
-C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 16:32:46 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 18:47:54 PAGE 2   
 
   55   3              P2_7 = !P2_7;
   56   3              break;
@@ -126,7 +126,7 @@ line level    source
  114   3            case mKey15:
  115   3              P2_7 = !P2_7;
  116   3              break;
-C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 16:32:46 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/15/2025 18:47:54 PAGE 3   
 
  117   3      
  118   3            case mKey16:
@@ -141,7 +141,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    196    ----
+   CODE SIZE        =    188    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
