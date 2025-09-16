@@ -14,7 +14,7 @@ mkey matrix_key_scan()
 	P1 = 0x0F;
 	if(P1 != 0x0F)
 		{
-			Delay1ms(20);
+			Delay1ms(10);
 			switch(P1)
 				{
 				case 0x07: col = 0; break;
@@ -31,7 +31,7 @@ mkey matrix_key_scan()
 				case 0xE0: row = 3; break;
 				}
 			while(P1 != 0xF0);
-			Delay1ms(20);
+			Delay1ms(10);
 			return keymap[row][col];
 		}
 	return mKey_None;

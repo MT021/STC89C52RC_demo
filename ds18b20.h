@@ -2,7 +2,7 @@
 #define __DS18B20_H__
 
 float ds18b20_readtemperature();
-unsigned char singlebus_Init();
+//unsigned char singlebus_Init();
 
 #endif
 

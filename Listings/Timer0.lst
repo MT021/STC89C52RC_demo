@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 19:00:04 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/16/2025 11:48:40 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
@@ -8,24 +8,24 @@ COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Timer0.c OPTIMIZE(8,SPEED) BROWS
 
 line level    source
 
-   1          #include <REGX52.H>
-   2          #include "XPT2046.h"
-   3          #include "smg.h"
+   1          //#include <REGX52.H>
+   2          //#include "XPT2046.h"
+   3          //#include "smg.h"
    4          //#include "IR.h"
-   5          #include "matrixled.h"
-   6          #include "delay.h"
+   5          //#include "matrixled.h"
+   6          //#include "delay.h"
    7          //#include "nixie.h"
    8          //#include "ds18b20.h"
    9          
-  10          #define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
+  10          //#define SMG_EN 1  //1: enable smg, 0: disable smg and enable matrixled
   11          
   12          //XPT2046_ADC
-  13          unsigned char XPT2046_target = XPT2046_VBAT; 
-  14          unsigned int XPT2046_ADC_Value = 0;
+  13          //unsigned char XPT2046_target = XPT2046_VBAT; 
+  14          //unsigned int XPT2046_ADC_Value = 0;
   15          
   16          //smg
-  17          unsigned char smg_value_buf[8];
-  18          bit smg_enable = 1; // 1: enable smg, 0: disable smg and enable matrixled
+  17          //unsigned char smg_value_buf[8];
+  18          //bit smg_enable = 1; // 1: enable smg, 0: disable smg and enable matrixled
   19          
   20          //ds18b20
   21          //int ds18b20_temp = 0;
@@ -36,41 +36,41 @@ line level    source
   26          
   27          // matrixled --ARE YOU OK !
   28          //unsigned char i, offset = 0;
-  29          unsigned char code arr_image_dynamic[] = {
-  30                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  31                                0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
-  32                                0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
-  33                                0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
-  34                                0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
-  35                                0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
-  36                                0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
-  37                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
-  38                              };
+  29          //unsigned char code arr_image_dynamic[] = {
+  30          //                      0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  31          //                      0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
+  32          //                      0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
+  33          //                      0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
+  34          //                      0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
+  35          //                      0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
+  36          //                      0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
+  37          //                      0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+  38          //                    };
   39          
-  40          void Timer0Init(void)   //10ms@11.0592MHz
-  41          {
-  42   1        TMOD &= 0xF0;   
-  43   1        TMOD |= 0x01;   
-  44   1        TL0 = 0x00;   
-  45   1        TH0 = 0xDC;   
-  46   1        TF0 = 0;  
-  47   1        TR0 = 1;  
-  48   1        ET0 = 1;
-  49   1        EA = 1;
-  50   1      
-  51   1        //smg
-  52   1        smg_value_buf[7] = 0X76;// Hex "H"
-  53   1        smg_value_buf[4] = 0x00;// gap between ADC and IR char
-  54   1      
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 19:00:04 PAGE 2   
+  40          //void Timer0Init(void)   //10ms@11.0592MHz
+  41          //{
+  42          //  TMOD &= 0xF0;   
+  43          //  TMOD |= 0x01;   
+  44          //  TL0 = 0x00;   
+  45          //  TH0 = 0xDC;   
+  46          //  TF0 = 0;  
+  47          //  TR0 = 1;  
+  48          //  ET0 = 1;
+  49          //  EA = 1;
+  50          
+  51            //smg
+  52          //  smg_value_buf[7] = 0X76;// Hex "H"
+  53          //  smg_value_buf[4] = 0x00;// gap between ADC and IR char
+  54          
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/16/2025 11:48:40 PAGE 2   
 
-  55   1        //matrixled
-  56   1        matrixled_init();
-  57   1        
-  58   1      //  IR_INT0_Init();
-  59   1      //  singlebus_Init();
-  60   1        
-  61   1      }
+  55            //matrixled
+  56          //  matrixled_init();
+  57            
+  58          //  IR_INT0_Init();
+  59          //  singlebus_Init();
+  60            
+  61          //}
   62          
   63          //void Timer0_Routine() interrupt 1
   64          //{
@@ -126,7 +126,7 @@ line level    source
  114          //      matrixled(i, arr_image_dynamic[i + offset]);
  115          //    }
  116          //    if( 0 == counts % 20)
-C51 COMPILER V9.60.7.0   TIMER0                                                            09/15/2025 19:00:04 PAGE 3   
+C51 COMPILER V9.60.7.0   TIMER0                                                            09/16/2025 11:48:40 PAGE 3   
 
  117          //    {
  118          //      if(++offset > 56)
@@ -137,20 +137,20 @@ line level    source
  123          //  #endif
  124          //}
  125          
- 126          void xpt2046_set_target(unsigned char target)
- 127          {
- 128   1        XPT2046_target = target;
- 129   1      }
+ 126          //void xpt2046_set_target(unsigned char target)
+ 127          //{
+ 128          //  XPT2046_target = target;
+ 129          //}
  130          
- 131          void smg_set_enable(bit enable)
- 132          {
- 133   1        smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
- 134   1      }
+ 131          //void smg_set_enable(bit enable)
+ 132          //{
+ 133          //  smg_enable = enable;  // 1: enable smg, 0: disable smg and enable matrixled
+ 134          //}
  135          
- 136          bit smg_get_enable()
- 137          {
- 138   1        return smg_enable;
- 139   1      }
+ 136          //bit smg_get_enable()
+ 137          //{
+ 138          //  return smg_enable;
+ 139          //}
  140          // unsigned int xpt2046_get_adc_value()
  141          // {
  142          //     return XPT2046_ADC_Value;
@@ -158,13 +158,13 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     39    ----
-   CONSTANT SIZE    =     64    ----
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     11    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      1       1
+   BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
