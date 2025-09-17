@@ -1,4 +1,5 @@
 #include <REGX52.H>
+//#include "delay.h"
 // #include "XPT2046.h"
 
 // #define XPT2046_XP 		0x94
@@ -32,7 +33,7 @@ unsigned int xpt2046_readADC(unsigned char cmd)
 {
 	unsigned char i;
 	unsigned int adc = 0;
-	
+
 	XPT2046_DCLK = 0;
 	XPT2046_CS = 0;
 		

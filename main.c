@@ -141,6 +141,7 @@ void main()
 			default:
 				break;
 		}
+
 			//adc
 			XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);		
 			smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
@@ -162,22 +163,22 @@ void main()
 			smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
 			smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
 			smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
-			
+
 			smg_display(smg_value_buf, 1);
 			
 			//matrixled
-			counts++;
-			counts %= 20;
-			for(i = 0;i < 8;i++)
-			{
-				matrixled(i, arr_image_dynamic[i + offset]);
-			}
-			if( 0 == counts)
-			{
-				if(++offset > 56)
-				{
-					offset = 0;
-				}			
-			}
+//			counts++;
+//			counts %= 10;
+//			for(i = 0;i < 8;i++)
+//			{
+//				matrixled(i, arr_image_dynamic[i + offset]);
+//			}
+//			if( 0 == counts)
+//			{
+//				if(++offset > 56)
+//				{
+//					offset = 0;
+//				}			
+//			}
 	}
 }

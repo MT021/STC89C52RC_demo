@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   XPT2046                                                           09/16/2025 11:41:46 PAGE 1   
+C51 COMPILER V9.60.7.0   XPT2046                                                           09/17/2025 18:54:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE XPT2046
@@ -9,86 +9,87 @@ COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE XPT2046.c OPTIMIZE(8,SPEED) BROW
 line level    source
 
    1          #include <REGX52.H>
-   2          // #include "XPT2046.h"
-   3          
-   4          // #define XPT2046_XP     0x94
-   5          // #define XPT2046_YP     0xD4
-   6          // #define XPT2046_VBAT 0xA4
-   7          // #define XPT2046_AUX    0xE4
-   8          
-   9          sbit XPT2046_CS = P3^5;
-  10          sbit XPT2046_DCLK = P3^6;
-  11          sbit XPT2046_DIN = P3^4;
-  12          sbit XPT2046_DOUT = P3^7;
-  13          
-  14          // unsigned int XPT2046_ADC_Value = 0;
-  15          // unsigned int XPT2046_target = XPT2046_VBAT;
-  16          
-  17          // void Timer0Init(void)    //10ms@11.0592MHz
-  18          // {
-  19          
-  20          //  TMOD &= 0xF0;   
-  21          //  TMOD |= 0x01;   
-  22          //  TL0 = 0x00;   
-  23          //  TH0 = 0xDC;   
-  24          //  TF0 = 0;  
-  25          //  TR0 = 1;  
-  26          //  ET0 = 1;
-  27          //  EA = 1;
-  28          // }
-  29          
+   2          //#include "delay.h"
+   3          // #include "XPT2046.h"
+   4          
+   5          // #define XPT2046_XP     0x94
+   6          // #define XPT2046_YP     0xD4
+   7          // #define XPT2046_VBAT 0xA4
+   8          // #define XPT2046_AUX    0xE4
+   9          
+  10          sbit XPT2046_CS = P3^5;
+  11          sbit XPT2046_DCLK = P3^6;
+  12          sbit XPT2046_DIN = P3^4;
+  13          sbit XPT2046_DOUT = P3^7;
+  14          
+  15          // unsigned int XPT2046_ADC_Value = 0;
+  16          // unsigned int XPT2046_target = XPT2046_VBAT;
+  17          
+  18          // void Timer0Init(void)    //10ms@11.0592MHz
+  19          // {
+  20          
+  21          //  TMOD &= 0xF0;   
+  22          //  TMOD |= 0x01;   
+  23          //  TL0 = 0x00;   
+  24          //  TH0 = 0xDC;   
+  25          //  TF0 = 0;  
+  26          //  TR0 = 1;  
+  27          //  ET0 = 1;
+  28          //  EA = 1;
+  29          // }
   30          
-  31          unsigned int xpt2046_readADC(unsigned char cmd)
-  32          {
-  33   1        unsigned char i;
-  34   1        unsigned int adc = 0;
-  35   1        
-  36   1        XPT2046_DCLK = 0;
-  37   1        XPT2046_CS = 0;
-  38   1          
-  39   1        for(i = 0;i < 8;i++)
-  40   1        {
-  41   2          XPT2046_DIN = cmd >> 7;
-  42   2          cmd <<= 1;
-  43   2          XPT2046_DCLK = 0;
-  44   2          XPT2046_DCLK = 1;   
-  45   2        }
-  46   1      
-  47   1        XPT2046_DCLK = 1;
-  48   1        XPT2046_DCLK = 0;
-  49   1        
-  50   1        for(i = 0;i < 12;i++)
-  51   1        {
-  52   2          adc <<= 1;
-  53   2          XPT2046_DCLK = 1;
-  54   2          XPT2046_DCLK = 0;
-C51 COMPILER V9.60.7.0   XPT2046                                                           09/16/2025 11:41:46 PAGE 2   
+  31          
+  32          unsigned int xpt2046_readADC(unsigned char cmd)
+  33          {
+  34   1        unsigned char i;
+  35   1        unsigned int adc = 0;
+  36   1      
+  37   1        XPT2046_DCLK = 0;
+  38   1        XPT2046_CS = 0;
+  39   1          
+  40   1        for(i = 0;i < 8;i++)
+  41   1        {
+  42   2          XPT2046_DIN = cmd >> 7;
+  43   2          cmd <<= 1;
+  44   2          XPT2046_DCLK = 0;
+  45   2          XPT2046_DCLK = 1;   
+  46   2        }
+  47   1      
+  48   1        XPT2046_DCLK = 1;
+  49   1        XPT2046_DCLK = 0;
+  50   1        
+  51   1        for(i = 0;i < 12;i++)
+  52   1        {
+  53   2          adc <<= 1;
+  54   2          XPT2046_DCLK = 1;
+C51 COMPILER V9.60.7.0   XPT2046                                                           09/17/2025 18:54:56 PAGE 2   
 
-  55   2          adc |= XPT2046_DOUT;  
-  56   2        }
-  57   1        
-  58   1        XPT2046_CS = 1;
-  59   1        
-  60   1        return adc;
-  61   1      }
-  62          
-  63          // void Timer0_Routine() interrupt 1
-  64          // {
-  65          //  static unsigned char counts = 0;
-  66          //  TL0 = 0x00;   
-  67          //  TH0 = 0xDC;
-  68          //  counts++;
-  69          //  counts %= 50;
-  70          //  if(0 == counts)
-  71          //  {
-  72          //    XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
-  73          //  }
-  74          // }
-  75          
-  76          // void xpt2046_set_target(unsigned char target)
-  77          // {
-  78          //  XPT2046_target = target;
-  79          // }
+  55   2          XPT2046_DCLK = 0;
+  56   2          adc |= XPT2046_DOUT;  
+  57   2        }
+  58   1        
+  59   1        XPT2046_CS = 1;
+  60   1        
+  61   1        return adc;
+  62   1      }
+  63          
+  64          // void Timer0_Routine() interrupt 1
+  65          // {
+  66          //  static unsigned char counts = 0;
+  67          //  TL0 = 0x00;   
+  68          //  TH0 = 0xDC;
+  69          //  counts++;
+  70          //  counts %= 50;
+  71          //  if(0 == counts)
+  72          //  {
+  73          //    XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);
+  74          //  }
+  75          // }
+  76          
+  77          // void xpt2046_set_target(unsigned char target)
+  78          // {
+  79          //  XPT2046_target = target;
+  80          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
