@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2025 19:21:44 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/27/2025 20:03:44 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -29,182 +29,209 @@ line level    source
   19   1        unsigned char XPT2046_target = XPT2046_VBAT; 
   20   1        unsigned int XPT2046_ADC_Value = 0;
   21   1        //matrixled -- ARE YOU OK !
-  22   1        unsigned char i, counts = 0, offset = 0;
-  23   1        unsigned char code arr_image_dynamic[] = {
-  24   1                            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  25   1                            0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
-  26   1                            0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
-  27   1                            0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
-  28   1                            0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
-  29   1                            0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
-  30   1                            0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
-  31   1                            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
-  32   1                          };
+  22   1      //  unsigned char i, counts = 0, offset = 0;
+  23   1      //  unsigned char code arr_image_dynamic[] = {
+  24   1      //                      0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  25   1      //                      0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
+  26   1      //                      0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
+  27   1      //                      0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
+  28   1      //                      0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
+  29   1      //                      0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
+  30   1      //                      0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
+  31   1      //                      0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+  32   1      //                    };
   33   1        //ds18b20
   34   1        int ds18b20_temp = 0;
-  35   1      //  Timer0Init();
-  36   1        PWM_Motor_Init();
-  37   1      //  PWM_Init(0xAE, 0xFF, 10, 5);
-  38   1      
-  39   1        while(1)
-  40   1        {
-  41   2          //scan ekey to set ADC target
-  42   2          switch (scan_ekey())
-  43   2          {
-  44   3            case K1:
-  45   3              XPT2046_target = XPT2046_XP;  //AIN0 AD1
-  46   3              P2_7 = !P2_7;
-  47   3              break;
-  48   3            
-  49   3            case K2:
-  50   3              XPT2046_target = XPT2046_YP;  //AIN1 NTC1
-  51   3              P2_7 = !P2_7;
-  52   3              break;  
-  53   3            
-  54   3            case K3:
-C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2025 19:21:44 PAGE 2   
+  35   1        //PWM_Motor
+  36   1        unsigned char op_counts = 0;
+  37   1        unsigned char pwm_motor_threshold = 1;
+  38   1        char pwm_motor_dirt = 1;
+  39   1      //  Timer0Init();
+  40   1        PWM_Motor_Init();
+  41   1      //  PWM_Init(0xAE, 0xFF, 10, 5);
+  42   1      
+  43   1        while(1)
+  44   1        {
+  45   2          //scan ekey to set ADC target
+  46   2          switch (scan_ekey())
+  47   2          {
+  48   3            case K1:
+  49   3              XPT2046_target = XPT2046_XP;  //AIN0 AD1
+  50   3              P2_7 = !P2_7;
+  51   3              break;
+  52   3            
+  53   3            case K2:
+  54   3              XPT2046_target = XPT2046_YP;  //AIN1 NTC1
+C51 COMPILER V9.60.7.0   MAIN                                                              09/27/2025 20:03:44 PAGE 2   
 
-  55   3              XPT2046_target = XPT2046_VBAT;  //AIN2 GR1
-  56   3              P2_7 = !P2_7;
-  57   3              break;
-  58   3            
-  59   3            case K4:
-  60   3              XPT2046_target = XPT2046_AUX; //AIN3 J52
-  61   3              // smg_set_enable(!smg_get_enable());
-  62   3              P2_7 = !P2_7;
-  63   3              break;  
-  64   3      
-  65   3            default:
-  66   3              break;
-  67   3          }
-  68   2      
-  69   2          //scan matrix key TO DO
-  70   2          switch (matrix_key_scan())
-  71   2          {
-  72   3            case mKey1:
-  73   3              PWM_Motor_Set_Threshold(1);
-  74   3              P2_7 = !P2_7;
-  75   3              break;
-  76   3            
-  77   3            case mKey2:
-  78   3              PWM_Motor_Set_Threshold(2);
-  79   3              P2_7 = !P2_7;
-  80   3              break;
-  81   3      
-  82   3            case mKey3:
-  83   3              PWM_Motor_Set_Threshold(3);
-  84   3              P2_7 = !P2_7;
-  85   3              break;
-  86   3            
-  87   3            case mKey4:
-  88   3              PWM_Motor_Set_Threshold(4);
-  89   3              P2_7 = !P2_7;
-  90   3              break;
-  91   3      
-  92   3            case mKey5:
-  93   3              PWM_Motor_Set_Threshold(5);
-  94   3              P2_7 = !P2_7;
-  95   3              break;
-  96   3            
-  97   3            case mKey6:
+  55   3              P2_7 = !P2_7;
+  56   3              break;  
+  57   3            
+  58   3            case K3:
+  59   3              XPT2046_target = XPT2046_VBAT;  //AIN2 GR1
+  60   3              P2_7 = !P2_7;
+  61   3              break;
+  62   3            
+  63   3            case K4:
+  64   3              XPT2046_target = XPT2046_AUX; //AIN3 J52
+  65   3              // smg_set_enable(!smg_get_enable());
+  66   3              P2_7 = !P2_7;
+  67   3              break;  
+  68   3      
+  69   3            default:
+  70   3              break;
+  71   3          }
+  72   2      
+  73   2          //scan matrix key TO DO
+  74   2          switch (matrix_key_scan())
+  75   2          {
+  76   3            case mKey1:
+  77   3              PWM_Motor_Set_Threshold(1);
+  78   3              P2_7 = !P2_7;
+  79   3              break;
+  80   3            
+  81   3            case mKey2:
+  82   3              PWM_Motor_Set_Threshold(2);
+  83   3              P2_7 = !P2_7;
+  84   3              break;
+  85   3      
+  86   3            case mKey3:
+  87   3              PWM_Motor_Set_Threshold(3);
+  88   3              P2_7 = !P2_7;
+  89   3              break;
+  90   3            
+  91   3            case mKey4:
+  92   3              PWM_Motor_Set_Threshold(4);
+  93   3              P2_7 = !P2_7;
+  94   3              break;
+  95   3      
+  96   3            case mKey5:
+  97   3              PWM_Motor_Set_Threshold(5);
   98   3              P2_7 = !P2_7;
   99   3              break;
- 100   3      
- 101   3            case mKey7:
- 102   3              P2_7 = !P2_7;
- 103   3              break;
- 104   3            
- 105   3            case mKey8:
- 106   3              P2_7 = !P2_7;
- 107   3              break;
- 108   3      
- 109   3            case mKey9:
- 110   3              P2_7 = !P2_7;
- 111   3              break;
- 112   3      
- 113   3            case mKey10:
- 114   3              P2_7 = !P2_7;
- 115   3              break;
- 116   3      
-C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2025 19:21:44 PAGE 3   
+ 100   3            
+ 101   3            case mKey6:
+ 102   3              PWM_Motor_Set_Threshold(6);
+ 103   3              P2_7 = !P2_7;
+ 104   3              break;
+ 105   3      
+ 106   3            case mKey7:
+ 107   3              PWM_Motor_Set_Threshold(7);
+ 108   3              P2_7 = !P2_7;
+ 109   3              break;
+ 110   3            
+ 111   3            case mKey8:
+ 112   3              PWM_Motor_Set_Threshold(8);
+ 113   3              P2_7 = !P2_7;
+ 114   3              break;
+ 115   3      
+ 116   3            case mKey9:
+C51 COMPILER V9.60.7.0   MAIN                                                              09/27/2025 20:03:44 PAGE 3   
 
- 117   3            case mKey11:
+ 117   3              PWM_Motor_Set_Threshold(9);
  118   3              P2_7 = !P2_7;
  119   3              break;
  120   3      
- 121   3            case mKey12:
- 122   3              P2_7 = !P2_7;
- 123   3              break;
- 124   3      
- 125   3            case mKey13:
- 126   3              P2_7 = !P2_7;
- 127   3              break;
- 128   3      
- 129   3            case mKey14:
- 130   3              P2_7 = !P2_7;
- 131   3              break;
- 132   3      
- 133   3            case mKey15:
- 134   3              P2_7 = !P2_7;
- 135   3              break;
- 136   3      
- 137   3            case mKey16:
- 138   3              P2_7 = !P2_7;
- 139   3              break;  
- 140   3      
- 141   3            default:
- 142   3              break;
- 143   3          }
- 144   2      
- 145   2            //adc
- 146   2            XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);    
- 147   2            smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
- 148   2            smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
- 149   2            smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
- 150   2            smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
- 151   2          
- 152   2            //ds18b20
- 153   2            ds18b20_temp  = ds18b20_readtemperature() * 10;
- 154   2            if(ds18b20_temp < 0)
- 155   2            {
- 156   3              smg_value_buf[4] = 0x40;
- 157   3              ds18b20_temp = -ds18b20_temp;
- 158   3            }
- 159   2            else
- 160   2            {
- 161   3              smg_value_buf[4] = 0x00;
- 162   3            }
- 163   2            smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
- 164   2            smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
- 165   2            smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
- 166   2      
- 167   2            smg_display(smg_value_buf, 1);
- 168   2            
- 169   2            //matrixled
- 170   2      //      counts++;
- 171   2      //      counts %= 10;
- 172   2      //      for(i = 0;i < 8;i++)
- 173   2      //      {
- 174   2      //        matrixled(i, arr_image_dynamic[i + offset]);
- 175   2      //      }
- 176   2      //      if( 0 == counts)
- 177   2      //      {
- 178   2      //        if(++offset > 56)
-C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2025 19:21:44 PAGE 4   
+ 121   3            case mKey10:
+ 122   3              PWM_Motor_Set_Threshold(10);
+ 123   3              P2_7 = !P2_7;
+ 124   3              break;
+ 125   3      
+ 126   3            case mKey11:
+ 127   3              P2_7 = !P2_7;
+ 128   3              break;
+ 129   3      
+ 130   3            case mKey12:
+ 131   3              P2_7 = !P2_7;
+ 132   3              break;
+ 133   3      
+ 134   3            case mKey13:
+ 135   3              P2_7 = !P2_7;
+ 136   3              break;
+ 137   3      
+ 138   3            case mKey14:
+ 139   3              P2_7 = !P2_7;
+ 140   3              break;
+ 141   3      
+ 142   3            case mKey15:
+ 143   3              P2_7 = !P2_7;
+ 144   3              break;
+ 145   3      
+ 146   3            case mKey16:
+ 147   3              P2_7 = !P2_7;
+ 148   3              break;  
+ 149   3      
+ 150   3            default:
+ 151   3              break;
+ 152   3          }
+ 153   2      
+ 154   2              //adc
+ 155   2              XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);    
+ 156   2              smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+ 157   2              smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+ 158   2              smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+ 159   2              smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
+ 160   2              
+ 161   2              //ds18b20
+ 162   2              ds18b20_temp  = ds18b20_readtemperature() * 10;
+ 163   2            
+ 164   2            
+ 165   2              if(ds18b20_temp < 0)
+ 166   2              {
+ 167   3                smg_value_buf[4] = 0x40;
+ 168   3                ds18b20_temp = -ds18b20_temp;
+ 169   3              }
+ 170   2              else
+ 171   2              {
+ 172   3                smg_value_buf[4] = 0x00;
+ 173   3              }
+ 174   2              smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
+ 175   2              smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
+ 176   2              smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
+ 177   2      
+ 178   2      //      set_smg_value_buf(smg_value_buf);
+C51 COMPILER V9.60.7.0   MAIN                                                              09/27/2025 20:03:44 PAGE 4   
 
- 179   2      //        {
- 180   2      //          offset = 0;
- 181   2      //        }     
- 182   2      //      }
- 183   2        }
- 184   1      }
-*** WARNING C280 IN LINE 22 OF main.c: 'i': unreferenced local variable
-*** WARNING C280 IN LINE 23 OF main.c: 'arr_image_dynamic': unreferenced local variable
+ 179   2              smg_display(smg_value_buf, 1);
+ 180   2            
+ 181   2              op_counts++;
+ 182   2              op_counts %= 2;
+ 183   2              if(0 == op_counts)
+ 184   2              {
+ 185   3                pwm_motor_threshold += pwm_motor_dirt;
+ 186   3                PWM_Motor_Set_Threshold(pwm_motor_threshold);
+ 187   3                if(21 == pwm_motor_threshold)
+ 188   3                {
+ 189   4                  pwm_motor_dirt = -1;
+ 190   4                }
+ 191   3                if(4 == pwm_motor_threshold)
+ 192   3                {
+ 193   4                  pwm_motor_dirt = 1;
+ 194   4                }
+ 195   3              }
+ 196   2            
+ 197   2            
+ 198   2            //matrixled
+ 199   2      //      counts++;
+ 200   2      //      counts %= 10;
+ 201   2      //      for(i = 0;i < 8;i++)
+ 202   2      //      {
+ 203   2      //        matrixled(i, arr_image_dynamic[i + offset]);
+ 204   2      //      }
+ 205   2      //      if( 0 == counts)
+ 206   2      //      {
+ 207   2      //        if(++offset > 56)
+ 208   2      //        {
+ 209   2      //          offset = 0;
+ 210   2      //        }     
+ 211   2      //      }
+ 212   2        }
+ 213   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    418    ----
-   CONSTANT SIZE    =     64    ----
+   CODE SIZE        =    464    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----      16
@@ -213,4 +240,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

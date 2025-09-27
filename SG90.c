@@ -18,8 +18,10 @@ void PWM_Motor_Init()
 {
 	TMOD &= 0x0F;	
 	TMOD |= 0x10;	
-	TL1 = 0x33;
-	TH1 = 0xFE;
+//	TL1 = 0x33;			//500us
+//	TH1 = 0xFE;
+	TL1 = 0xA4;		//100us
+	TH1 = 0xFF;
 	TF1 = 0;	
 	TR1 = 1;
 	ET1 = 1;
@@ -32,11 +34,17 @@ void PWM_Motor_Init()
 void PWM_Motor_Timer1Routine() interrupt 3
 {
 	static unsigned char counter = 0;
-	TL1 = 0x33;
-	TH1 = 0xFE;
+//	static unsigned int looptime = 0;
+//	static char dirt = 1;
 	
+//	TL1 = 0x33; //500us
+//	TH1 = 0xFE;
+	TL1 = 0xA4;		//100us
+	TH1 = 0xFF;
 	counter++;
-	counter %= 40;//500us * 40 = 20ms
+//	counter %= 40;//500us * 40 = 20ms
+	counter %= 200;//100us * 200 = 20ms
+	
 	if(counter < g_pwm_motor_threshold)
 	{
 		PWM_Motor = 1;

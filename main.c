@@ -19,19 +19,23 @@ void main()
 	unsigned char XPT2046_target = XPT2046_VBAT; 
 	unsigned int XPT2046_ADC_Value = 0;
 	//matrixled -- ARE YOU OK !
-	unsigned char i, counts = 0, offset = 0;
-	unsigned char code arr_image_dynamic[] = {
-											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
-											0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
-											0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
-											0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
-											0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
-											0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
-											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
-										};
+//	unsigned char i, counts = 0, offset = 0;
+//	unsigned char code arr_image_dynamic[] = {
+//											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+//											0x00,0x3E,0x48,0x48,0x3E,0x00,0x7E,0x48,
+//											0x4C,0x32,0x00,0x7E,0x52,0x52,0x52,0x00,
+//											0x00,0x40,0x20,0x1E,0x20,0x40,0x00,0x3C,
+//											0x42,0x42,0x3C,0x00,0x7C,0x02,0x02,0x7C,
+//											0x00,0x00,0x3C,0x42,0x42,0x3C,0x00,0x7E,
+//											0x18,0x24,0x42,0x00,0x00,0x7A,0x7A,0x00,
+//											0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+//										};
 	//ds18b20
 	int ds18b20_temp = 0;
+	//PWM_Motor
+	unsigned char op_counts = 0;
+	unsigned char pwm_motor_threshold = 1;
+	char pwm_motor_dirt = 1;
 //	Timer0Init();
 	PWM_Motor_Init();
 //	PWM_Init(0xAE, 0xFF, 10, 5);
@@ -95,22 +99,27 @@ void main()
 				break;
 			
 			case mKey6:
+				PWM_Motor_Set_Threshold(6);
 				P2_7 = !P2_7;
 				break;
 
 			case mKey7:
+				PWM_Motor_Set_Threshold(7);
 				P2_7 = !P2_7;
 				break;
 			
 			case mKey8:
+				PWM_Motor_Set_Threshold(8);
 				P2_7 = !P2_7;
 				break;
 
 			case mKey9:
+				PWM_Motor_Set_Threshold(9);
 				P2_7 = !P2_7;
 				break;
 
 			case mKey10:
+				PWM_Motor_Set_Threshold(10);
 				P2_7 = !P2_7;
 				break;
 
@@ -142,29 +151,49 @@ void main()
 				break;
 		}
 
-			//adc
-			XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);		
-			smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
-			smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
-			smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
-			smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
-		
-			//ds18b20
-			ds18b20_temp  = ds18b20_readtemperature() * 10;
-			if(ds18b20_temp < 0)
- 			{
-				smg_value_buf[4] = 0x40;
- 				ds18b20_temp = -ds18b20_temp;
- 			}
- 			else
- 			{
-				smg_value_buf[4] = 0x00;
-			}
-			smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
-			smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
-			smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
+				//adc
+				XPT2046_ADC_Value = xpt2046_readADC(XPT2046_target);		
+				smg_value_buf[0] = get_smg_code(XPT2046_ADC_Value / 1000);
+				smg_value_buf[1] = get_smg_code(XPT2046_ADC_Value / 100 % 10);
+				smg_value_buf[2] = get_smg_code(XPT2046_ADC_Value / 10 % 10);
+				smg_value_buf[3] = get_smg_code(XPT2046_ADC_Value % 10);
+				
+				//ds18b20
+				ds18b20_temp  = ds18b20_readtemperature() * 10;
+			
+			
+				if(ds18b20_temp < 0)
+				{
+					smg_value_buf[4] = 0x40;
+					ds18b20_temp = -ds18b20_temp;
+				}
+				else
+				{
+					smg_value_buf[4] = 0x00;
+				}
+				smg_value_buf[5] = get_smg_code(ds18b20_temp / 100);
+				smg_value_buf[6] = get_smg_code((ds18b20_temp / 10) % 10) | 0x80;
+				smg_value_buf[7] = get_smg_code(ds18b20_temp % 10);
 
-			smg_display(smg_value_buf, 1);
+//			set_smg_value_buf(smg_value_buf);
+				smg_display(smg_value_buf, 1);
+			
+				op_counts++;
+				op_counts %= 2;
+				if(0 == op_counts)
+				{
+					pwm_motor_threshold += pwm_motor_dirt;
+					PWM_Motor_Set_Threshold(pwm_motor_threshold);
+					if(21 == pwm_motor_threshold)
+					{
+						pwm_motor_dirt = -1;
+					}
+					if(4 == pwm_motor_threshold)
+					{
+						pwm_motor_dirt = 1;
+					}
+				}
+			
 			
 			//matrixled
 //			counts++;
